@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="object">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="description" type="xs:string"/>
+				<xs:element name="attribute" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="description" type="xs:string"/>
+						</xs:sequence>
+						<xs:attribute name="id" type="xs:string" use="required"/>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="nullable" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="YES"/>
+									<xs:enumeration value="NO"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="isKey" type="xs:string"/>
+						<xs:attribute name="autoincrement" type="xs:string"/>
+						<xs:attribute name="type">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="int|date|varchar\(\d+\)|char\(\d+\)"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

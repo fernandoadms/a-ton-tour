@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object shortName="speobj" name="Objet">
+	<description>Objet d'une base de données et d'une application</description>
+	<attribute id="objidobj" name="identifiant" nullable="NO" isKey="YES" autoincrement="YES" type="int">
+		<description>Identifiant</description>
+	</attribute>
+	<attribute id="objcdtri" name="trigramme" nullable="NO" type="char(3)">
+		<description>Trigramme</description>
+	</attribute>
+	<attribute id="prjidprj" name="projet" nullable="NO" type="int">
+		<description>Identifiant du projet</description>
+	</attribute>
+	<attribute id="objlblib" name="libelle" nullable="NO" type="varchar(255)">
+		<description>Libellé</description>
+	</attribute>
+	<attribute id="objlbcde" name="code" nullable="YES" type="varchar(64)">
+		<description>Code</description>
+	</attribute>
+	<attribute id="objlbdes" name="description" nullable="NO" type="varchar(255)">
+		<description>Description</description>
+	</attribute>
+</object>

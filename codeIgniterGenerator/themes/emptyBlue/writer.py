@@ -65,7 +65,7 @@ class WriterObject(CIObject):
 
 	## CONTROLEUR
 	def listOfVariablesForViewExtraction(self, includesKey):
-		CIObject.listOfVariablesForViewExtraction(self, includesKey)
+		return CIObject.listOfVariablesForViewExtraction(self, includesKey)
 
 
 	## MODELE

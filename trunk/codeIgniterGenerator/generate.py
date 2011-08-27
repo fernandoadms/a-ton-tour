@@ -65,18 +65,33 @@ def generateHelper(theme, helpersDirectory, structure):
 	
 	content = string.replace(rawContent,"%(Name)", structure.obName )
 	content = string.replace(content,"%(tableName)", structure.dbTableName )
-	content = string.replace(content,"%(keyVariable)", structure.keyFields[0].dbName )
-	# forcer la consersion en int
-	if structure.keyFields[0].sqlType == "int":
-		content = string.replace(content,"%(intConversion)", "(int)" )
-	else:
-		content = string.replace(content,"%(intConversion)", "" )
 
-	content = string.replace(content,"%(listOfFieldsForSQL)", unicode(structure.listOfFieldsForSQL()) )
+	listOfFieldsForSelectAllSQL = unicode(structure.listOfKeys(fieldPrefix="", fieldSuffix = ", "))
+	nextString = structure.dbVariablesList("(var)s", 'var',  '', '', 0, False)
+	if listOfFieldsForSelectAllSQL != "":
+		if nextString != "":
+			listOfFieldsForSelectAllSQL += ", " + nextString
+	else:
+		listOfFieldsForSelectAllSQL = nextString
+	content = string.replace(content,"%(listOfFieldsForSelectAllSQL)", listOfFieldsForSelectAllSQL )
+
+	listOfKeys = unicode(structure.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))
+	content = string.replace(content,"%(keyVariable)", listOfKeys  )
+	
+	content = string.replace(content,"%(dollarKeyVariable)",  unicode(structure.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))  )
+	content = string.replace(content,"%(dollarKeyVariableWithIntConversion)",  unicode(structure.listOfKeys(fieldPrefix="$", fieldSuffix = ", ", withIntConversion=True)) )
+
+	listOfFieldsForSQL = unicode(structure.listOfFieldsForSQL())
+	if listOfFieldsForSQL != "" and listOfKeys != "" :
+		listOfFieldsForSQL = listOfKeys + ", " +listOfFieldsForSQL
+
+	content = string.replace(content,"%(listOfFieldsForSQL)", listOfFieldsForSQL )
 	content = string.replace(content,"%(listOfFieldsForMethodInsert)", unicode(structure.listOfFieldsForMethodInsert()) )
 	content = string.replace(content,"%(listOfFieldsForMethodUpdate)", unicode(structure.listOfFieldsForMethodUpdate()) )
+	content = string.replace(content,"%(listOfFieldsForArrayUpdate)", unicode(structure.listOfFieldsForArrayUpdate()) )
 	content = string.replace(content,"%(listOfFieldsForUpdate)", unicode(structure.listOfFieldsForUpdate()) )
 	content = string.replace(content,"%(listOfFieldsForInsert)", unicode(structure.listOfFieldsForInsert()) )
+	content = string.replace(content,"%(keyVariableEqualsX)", unicode(structure.keyVariableEqualsX()) )
 
 	filename = os.path.join(helpersDirectory, "%s_helper.php" % structure.obName.lower() )
 	file = open(filename,'w')

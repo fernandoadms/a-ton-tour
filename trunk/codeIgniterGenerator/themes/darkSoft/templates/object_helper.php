@@ -12,7 +12,7 @@
  */
 if (!function_exists('getAll%(Name)sFromDB')) {
 	function getAll%(Name)sFromDB($db) {
-		$sql = "SELECT %(keyVariable), %(listOfFieldsForSQL) from %(tableName) ";
+		$sql = "SELECT %(listOfFieldsForSelectAllSQL) from %(tableName) ";
 		$query = $db->query($sql);
 
 		// recuperer les enregistrements
@@ -43,9 +43,9 @@ if (!function_exists('insertNew%(Name)')) {
  * Mise a jour d'un enregistrement
  */
 if (!function_exists('update%(Name)')) {
-	function update%(Name)($db, $%(keyVariable), %(listOfFieldsForMethodUpdate)) {
-		$sql = "update %(tableName) set %(listOfFieldsForUpdate) where %(keyVariable) = ?";
-		$query = $db->query($sql, array(%(listOfFieldsForMethodUpdate), $%(keyVariable)));
+	function update%(Name)($db, %(listOfFieldsForMethodUpdate)) {
+		$sql = "update %(tableName) set %(listOfFieldsForUpdate) where %(keyVariableEqualsX)";
+		$query = $db->query($sql, array(%(listOfFieldsForArrayUpdate) ));
 	}
 }
 
@@ -54,9 +54,9 @@ if (!function_exists('update%(Name)')) {
  * Suppression d'un enregistrement
  */
 if (!function_exists('delete%(Name)')) {
-	function delete%(Name)($db, $%(keyVariable)) {
-		$sql = "delete from %(tableName) where %(keyVariable) = ?";
-		$query = $db->query($sql, array(%(intConversion)$%(keyVariable)));
+	function delete%(Name)($db, %(keyVariable)) {
+		$sql = "delete from %(tableName) where %(keyVariableEqualsX)";
+		$query = $db->query($sql, array(%(dollarKeyVariableWithIntConversion)));
 	}
 }
 
@@ -68,10 +68,10 @@ if (!function_exists('delete%(Name)')) {
  * @return array
  */
 if (!function_exists('get%(Name)Row')) {
-	function get%(Name)Row($db, $%(keyVariable)) {
-		$sql = "select %(keyVariable), %(listOfFieldsForSQL) from %(tableName) " .
-		"where %(keyVariable) = ?";
-		$query = $db->query($sql, array($%(keyVariable)));
+	function get%(Name)Row($db, %(keyVariable)) {
+		$sql = "select %(listOfFieldsForSelectAllSQL) from %(tableName) " .
+		"where %(keyVariableEqualsX)";
+		$query = $db->query($sql, array(%(dollarKeyVariableWithIntConversion)));
 		if ($query->num_rows() == 0) {
 			return null;
 		}

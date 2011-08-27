@@ -141,20 +141,24 @@ class CIObject:
 
 
 	def dbVariablesList(self, template, variableName, typeName="", descrName="", indent=1, includesKey=True, suffix=""):
-		variables = ""
-		variableDeclaration = template
-		if includesKey :
-			variableDeclaration = variableDeclaration.replace("(%s)s" % variableName, self.keyFields[0].dbName)
-			if typeName != "":
-				variableDeclaration = variableDeclaration.replace("(%s)s" % typeName, self.keyFields[0].sqlType)
-			if descrName != "" :
-				description = self.keyFields[0].description
-				variableDeclaration = variableDeclaration.replace("(%s)s" % descrName, description)
-			variables += variableDeclaration + suffix
-	
 		prefix = ", "
 		if indent > 0 :
 			prefix = "\n" + ("\t"*indent)
+
+		variables = ""
+		variableDeclaration = template
+		if includesKey :
+			for field in self.keyFields:
+				if variables != "":
+					variables += prefix
+				variableDeclaration = variableDeclaration.replace("(%s)s" % variableName, field.dbName)
+				if typeName != "":
+					variableDeclaration = variableDeclaration.replace("(%s)s" % typeName, field.sqlType)
+				if descrName != "" :
+					description = field.description
+					variableDeclaration = variableDeclaration.replace("(%s)s" % descrName, description)
+				variables += variableDeclaration + suffix
+	
 			 
 		for variable in self.nonKeyFields:
 			if variables != "":
@@ -338,12 +342,39 @@ class CIObject:
 		return self.dbVariablesList("$(var)s", 'var',  '', '', 0, not includesAutoIncrement)
 
 	def listOfFieldsForMethodUpdate(self):
-		return self.dbVariablesList("$(var)s", 'var',  '', '', 0, False)
+		return self.dbVariablesList("$(var)s", 'var',  '', '', 0, True)
+
+	def listOfFieldsForArrayUpdate(self):
+		updateKeys = unicode(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", ", withIntConversion=True))
+		listOfFields = self.dbVariablesList("$(var)s", 'var',  '', '', 0, False)
+		if listOfFields != "":
+			if updateKeys != "":
+				listOfFields = listOfFields + ", " + updateKeys
+		else:
+			listOfFields = updateKeys
+		return listOfFields
 
 	def listOfFieldsForSQL(self):
 		return self.dbVariablesList("(var)s", 'var',  '', '', 0, False)
 
+	def keyVariableEqualsX(self):
+		return self.listOfKeys(fieldPrefix="", fieldSuffix = "=? and ",withIntConversion=False) + "=?"
+
+	def listOfKeys(self, fieldPrefix = "", fieldSuffix = "", withIntConversion = False):
+		resultString = ""
+		for field in self.keyFields:
+			if field.sqlType == "int" and withIntConversion:
+				resultString += ("(int)"+fieldPrefix + field.dbName + fieldSuffix)
+			else:
+				resultString += (fieldPrefix+ field.dbName + fieldSuffix)
+
+		if len(fieldSuffix) > 0:
+			suffixLength = 0 - len(fieldSuffix)
+			return resultString[:suffixLength]
+		else:
+			return resultString
 
 
 
-			
+
+

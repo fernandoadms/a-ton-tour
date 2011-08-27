@@ -69,7 +69,7 @@ class WriterObject(CIObject):
 				valueCode = ""
 
 			if field.sqlType.upper() == "DATE":
-				attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10"%(valueCode)s> <span id="btn_%(dbName)s" class="ss_sprite ss_calendar">&nbsp;</span>""" % { 'dbName' : field.dbName, 'valueCode': valueCode }
+				attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10"%(valueCode)s class="inp-form"> <img src="<?=base_url()?>www/images/forms/icon_calendar.jpg" alt="" id="btn_%(dbName)s"">""" % { 'dbName' : field.dbName, 'valueCode': valueCode }
 			else:
 				if field.nullable:
 					cssClass = "inp-form"
@@ -83,7 +83,7 @@ class WriterObject(CIObject):
 			if field.nullable:
 				attributeCode += "<td></td>"
 			else:
-				attributeCode += """<td><div class="error-left"></div><div class="error-inner">This field is required.</div></td>"""
+				attributeCode += """<td><!--div class="error-left"></div><div class="error-inner">This field is required.</div--></td>"""
 
 
 			attributeCode += "</tr>"

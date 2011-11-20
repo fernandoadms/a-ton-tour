@@ -197,6 +197,9 @@ if __name__ == '__main__':
 	config = ConfigParser.ConfigParser()
 	config.readfp(open('theme.cfg'))
 	theme = config.get('global', 'theme')
+	CIRootFiles = config.get('generation', 'outDirFor_Classes')
+	SQLFiles = config.get('generation', 'outDirFor_SQL')
+	databaseName = config.get('generation', 'database')
 
 	#import du theme
 	print "Using theme <"+ theme +">..."
@@ -205,14 +208,12 @@ if __name__ == '__main__':
 	themeModule = getattr( getattr(module,theme), "writer")
 
 	
-	if len(sys.argv) < 3:
-		print "Syntax : " + sys.argv[0] + " <databaseName> <fileObject0.xml> [fileObject1.xml]"
+	if len(sys.argv) < 2:
+		print "Syntax : " + sys.argv[0] + " <fileObject0.xml> [fileObject1.xml]"
 		sys.exit(1)
-	databaseName = sys.argv[1]
 
 
-
-	i = 2
+	i = 1
 	while i < len(sys.argv):
 		aFilename = sys.argv[i]
 
@@ -221,7 +222,6 @@ if __name__ == '__main__':
 		structure = themeModule.WriterObject()
 		structure.fromXML(aFilename)
 	
-		CIRootFiles = "CI_application"
 		generateModel(theme, os.path.join(CIRootFiles,"models"), structure)
 
 		generateHelper(theme, os.path.join(CIRootFiles,"helpers"), structure)
@@ -233,7 +233,7 @@ if __name__ == '__main__':
 		generateViewEdit(theme, os.path.join(CIRootFiles,"views"), structure)
 		print "   CI objects generated in " + CIRootFiles
 	
-		SQLFiles = "sql"
+
 		genrateSQL(theme, SQLFiles, databaseName, structure )
 		print "   SQL script generated in " + SQLFiles
 

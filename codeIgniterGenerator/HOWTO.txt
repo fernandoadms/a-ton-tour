@@ -5,6 +5,9 @@ HowTo:
 3. Changer comme bon vous semble les fichiers XML
 4. Lancer la commande suivante : 
 	./generate.py <databaseName> <fileObject0.xml> [fileObject1.xml]
+ou
+	./generate.py <databaseName> </path/to/*.xml>
+
 
 exemples : 
 	./generate.py "flm" objects/LienActeurProjet.xml

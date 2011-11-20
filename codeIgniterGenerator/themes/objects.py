@@ -71,7 +71,10 @@ class CIObject:
 				aField.autoincrement = (attributeTag.getAttribute("autoincrement") == "YES")
 
 			descriptionDef = attributeTag.getElementsByTagName("description")[0]
-			aField.description = descriptionDef.firstChild.data
+			if descriptionDef.firstChild :
+				aField.description = descriptionDef.firstChild.data
+			else:
+				aField.description = ""
 			self.addFieldObject(aField)
 			
 		

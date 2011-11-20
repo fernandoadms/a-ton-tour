@@ -1,1 +1,1 @@
-Les fichiers générés sont ici.
+Les fichiers PHP sont générés dans ce répertoire.

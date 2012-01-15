@@ -1,3 +1,6 @@
+%[kind : helpers]
+%[file : %%(self.obName.lower())%%_helper.php] 
+%[path : helpers]
 <?php
 
 /*
@@ -10,8 +13,8 @@
  * @param object $db database object
  * @return array of data
  */
-if (!function_exists('getAll%(Name)sFromDB')) {
-	function getAll%(Name)sFromDB($db, $orderBy = null, $asc = null, $limit = null, $offset = null) {
+if (!function_exists('getAll%%(self.obName)%%sFromDB')) {
+	function getAll%%(self.obName)%%sFromDB($db, $orderBy = null, $asc = null, $limit = null, $offset = null) {
 		if( $orderBy != null ){
 			if($asc != null) {
 				$db->order_by($orderBy, $asc);
@@ -20,9 +23,9 @@ if (!function_exists('getAll%(Name)sFromDB')) {
 			}
 		}
 		if( $limit == null ) {
-			$query = $db->get("%(tableName)");
+			$query = $db->get("%%(self.dbTableName)%%");
 		} else {
-			$query = $db->limit($limit, $offset)->get("%(tableName)");
+			$query = $db->limit($limit, $offset)->get("%%(self.dbTableName)%%");
 		}
 		// recuperer les enregistrements
 		$records = array();
@@ -38,19 +41,42 @@ if (!function_exists('getAll%(Name)sFromDB')) {
  * @param object $db database object
  * @return int
  */
-if (!function_exists('getCount%(Name)sFromDB')) {
-	function getCount%(Name)sFromDB($db) {
-		return $db->count_all("%(tableName)");
+if (!function_exists('getCount%%(self.obName)%%sFromDB')) {
+	function getCount%%(self.obName)%%sFromDB($db) {
+		return $db->count_all("%%(self.dbTableName)%%");
 	}
 }
 
 /**
  * Insere un nouvel enregistrement
  */
-if (!function_exists('insertNew%(Name)')) {
-	function insertNew%(Name)($db, %(helper_listOfFieldsForMethodInsert)) {
-		$data=array( %(helper_listOfFieldsForInsert) );
-		$db->insert('%(tableName)',$data);
+if (!function_exists('insertNew%%(self.obName)%%')) {
+	function insertNew%%(self.obName)%%($db, %%
+phpCode = "" 
+if self.isCrossTable:
+	phpCode = self.listOfKeys(fieldPrefix="$", fieldSuffix = ", ",withIntConversion=False)
+else:
+	includesAutoIncrement = False
+	for field in self.keyFields:
+		if field.autoincrement and not includesAutoIncrement:
+			includesAutoIncrement = True
+	phpCode = self.dbVariablesList("$(var)s", 'var',  '', '', 0, not includesAutoIncrement)
+RETURN = phpCode
+%%) {
+		$data=array( %%
+phpCode = ""
+if self.isCrossTable:
+	includesKey = True
+	phpCode = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKey)
+else:
+	includesAutoIncrement = False
+	for field in self.keyFields:
+		if field.autoincrement and not includesAutoIncrement:
+			includesAutoIncrement = True
+	phpCode = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, not includesAutoIncrement)
+RETURN = phpCode
+%%);
+		$db->insert('%%(self.dbTableName)%%',$data);
 		return $db->insert_id();
 	}
 }
@@ -59,23 +85,33 @@ if (!function_exists('insertNew%(Name)')) {
 /**
  * Mise a jour d'un enregistrement
  */
-%(commentStart_crossTable)
-if (!function_exists('update%(Name)')) {
-	function update%(Name)($db, $%(keyVariable), %(helper_listOfFieldsForMethodUpdate)) {
-		$data = array(%(helper_listOfFieldsForArrayValues));
-		$db->where('%(keyVariable)', %(dollarKeyVariable));
-		$db->update('%(tableName)', $data);
+if (!function_exists('update%%(self.obName)%%')) {
+	function update%%(self.obName)%%($db, %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%, %%
+includesKey = False
+if self.isCrossTable:
+	includesKey = True
+RETURN = self.dbVariablesList("$(var)s", 'var',  '', '', 0, includesKey)
+%%) {
+		$data = array(%%
+includesKey = False
+if self.isCrossTable:
+	includesKey = True
+RETURN = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKey)
+%%);
+		$db->where('%%(self.keyFields[0].dbName)%%', %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%);
+		$db->update('%%(self.dbTableName)%%', $data);
 	}
 }
-%(commentStop_crossTable)
 
 
 /**
  * Suppression d'un enregistrement
  */
-if (!function_exists('delete%(Name)')) {
-	function delete%(Name)($db, %(dollarKeyVariable)) {
-		$db->delete('%(tableName)', array('%(keyVariable)' => %(dollarKeyVariable))); 
+if (!function_exists('delete%%(self.obName)%%')) {
+	function delete%%(self.obName)%%($db, %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%) {
+		$db->delete('%%(self.dbTableName)%%', array(%%
+includesKey = True
+RETURN = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKey)%%)); 
 	}
 }
 
@@ -86,9 +122,9 @@ if (!function_exists('delete%(Name)')) {
  * @param int id de l'enregistrement
  * @return array
  */
-if (!function_exists('get%(Name)Row')) {
-	function get%(Name)Row($db, %(dollarKeyVariable)) {
-		$query = $db->get_where('%(tableName)', array('%(keyVariable)' => %(dollarKeyVariable)));
+if (!function_exists('get%%(self.obName)%%Row')) {
+	function get%%(self.obName)%%Row($db, %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%) {
+		$query = $db->get_where('%%(self.dbTableName)%%', array('%%(self.keyFields[0].dbName)%%' => $%%(self.keyFields[0].dbName)%%));
 		if ($query->num_rows() != 1) {
 			return null;
 		}

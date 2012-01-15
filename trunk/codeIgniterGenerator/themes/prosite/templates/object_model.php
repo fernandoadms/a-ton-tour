@@ -1,12 +1,15 @@
+%[kind : models]
+%[file : %%(self.obName.lower())%%_model.php]
+%[path : models]
 <?php
 /*
  * Created by generator
  *
  */
 
-include_once( APPPATH . 'models/%(name_lower)Base_model' . EXT );
+include_once( APPPATH . 'models/%(self.obName.lower())%%Base_model' . EXT );
 
-class %(Name)_model extends %(Name)Base_model {
+class %%(self.obName)%%_model extends %%(self.obName)%%Base_model {
 	
 	/**
 	 * Constructeur

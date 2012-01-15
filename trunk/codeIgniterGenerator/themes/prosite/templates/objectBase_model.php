@@ -1,5 +1,5 @@
 %[kind : baseModels]
-%[file : %%(self.obName.lower())%%Base_model-test.php]
+%[file : %%(self.obName.lower())%%Base_model.php]
 %[path : models]
 <?php
 /*

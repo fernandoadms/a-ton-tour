@@ -1,30 +1,91 @@
+%[kind : subViews]
+%[file : %%(self.obName.lower())%%_update_view.php]
+%[path : views/subviews]
 <?php
 ?>
 
 <!-- Edition d'un objet -->
 <fieldset>
-	<legend><a name="new"></a>Editer un %(Name)</legend>
+	<legend><a name="new"></a>Editer un %%(self.obName)%%</legend>
 
 <?
 $attributes_info = array('name' => 'EditForm');
-$fields_info = array('%(keyVariable)' => $%(name_lower)->%(keyVariable));
-echo form_open_multipart('edit%(name_lower)/save', $attributes_info, $fields_info );
+$fields_info = array('%(keyVariable)' => $%%(self.obName.lower())%%->%(keyVariable));
+echo form_open_multipart('edit%%(self.obName.lower())%%/save', $attributes_info, $fields_info );
 ?>
 	<table>
-		%(listOfVariablesForEditing)
+		%%
+allAttributesCode = ""
+
+for field in self.fields:
+	attributeCode = ""
+	if field.autoincrement:
+		attributeCode += "<!-- AUTO_INCREMENT : DO NOT DISPLAY THIS ATTRIBUTE\n"
+	attributeCode += """<tr>
+			<td nowrap><label title="%(desc)s" for="%(dbName)s">""" % { 'dbName' : field.dbName, 'desc' : field.description }
+
+	if not field.nullable:
+		attributeCode += "* "
+
+	attributeCode += """%(obName)s</label> : </td>
+		<td>""" % { 'obName' : field.obName }
+	if field.isKey:
+		attributeCode += """<input type="hidden" id="%(dbName)s" value="<?= $%(structureObName)s->%(dbName)s ?>" """ % { 'dbName' : field.dbName, 'structureObName' : self.obName.lower() }
+	else:
+		if field.sqlType.upper() == "DATE":
+			attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" value="<?= $%(structureObName)s->%(dbName)s ?>" size="8" maxlength="10"> <span id="btn_%(dbName)s" class="ss_sprite ss_calendar">&nbsp;</span>""" % { 'dbName' : field.dbName, 'structureObName' : self.obName.lower() }
+		elif field.sqlType.upper() == "TEXT":
+			attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s"><?= $%(structureObName)s->%(dbName)s ?></textarea>""" % { 'dbName' : field.dbName, 'structureObName' : self.obName.lower() }
+		else:
+			attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" value="<?= $%(structureObName)s->%(dbName)s ?>" >""" % { 'dbName' : field.dbName, 'structureObName' : self.obName.lower() }
+
+	attributeCode += """</td>
+		</tr>"""
+
+	if field.autoincrement:
+		attributeCode += "\n-->"
+
+	# ajouter le nouvel attribut, avec indentation si ce n'est pas le premier
+	if allAttributesCode != "":
+		allAttributesCode += "\n\t\t" 
+	allAttributesCode += attributeCode
+
+
+RETURN = allAttributesCode 
+%%
 		<tr>
 			<td></td>
 			<td>
 				<button onclick="document.forms['EditForm'].sumbit()" class="form-submit">
 					Enregistrer
 				</button>
-				<button onclick="document.location.href='<?=base_url()?>index.php/list%(name_lower)s';return false;" class="form-back">
+				<button onclick="document.location.href='<?=base_url()?>index.php/list%%(self.obName.lower())%%s';return false;" class="form-back">
 					Retour
 				</button>
 			</td>
 		</tr>
 	</table>
-	%(javascriptCodeForControls)
+	%%
+jsCode = ""
+hasDate = False
+for field in self.fields:
+	if field.sqlType.upper() == "DATE":
+		hasDate = True
+		if jsCode == "":
+			jsCode = """<script type="text/javascript">//<![CDATA[
+      var cal = Calendar.setup({
+          onSelect: function(cal) { cal.hide() },
+          showTime: false
+      });
+"""
+		jsCode += """	cal.manageFields("btn_%(dbName)s", "%(dbName)s", "%%d/%%m/%%Y");
+""" % { 'dbName' : field.dbName }
+
+if hasDate:
+	jsCode += """
+    //]]></script>"""
+RETURN = jsCode
+%%
 <?
 echo form_close('');
 ?>

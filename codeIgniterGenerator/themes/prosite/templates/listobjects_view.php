@@ -1,3 +1,6 @@
+%[kind : views]
+%[file : list%%(self.obName.lower())%%_view.php] 
+%[path : views]
 <?php
 /*
  * Created by generator
@@ -10,7 +13,7 @@ $this->load->helper('template');
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<? echo htmlHeader('%(Name)'); ?>
+<? echo htmlHeader('%%(self.obName)%%'); ?>
 
 </head>
 <body>
@@ -19,7 +22,7 @@ $this->load->helper('template');
 
 <div class="container container_12">
 	<div class="grid_12">
-		<h1><img src="<?=base_url()?>www/img/%(name_lower).png" style="vertical-align:middle;"> Liste des %(name_lower)s</h1>
+		<h1><img src="<?=base_url()?>www/img/%%(self.obName.lower())%%.png" style="vertical-align:middle;"> Liste des %%(self.obName.lower())%%s</h1>
 	</div>
  	<div class="clear"></div>
 </div> <!-- container container_12 -->
@@ -36,11 +39,11 @@ $this->load->helper('template');
   			<td class="pageLeft">&nbsp;</td>
   			<td class="page">
   			
-<?php $this->load->view('subviews/%(name_lower)s_all_view.php'); ?>
+<?php $this->load->view('subviews/%%(self.obName.lower())%%s_all_view.php'); ?>
 	
 <hr>
 	
-<?php $this->load->view('subviews/%(name_lower)_new_view.php'); ?>
+<?php $this->load->view('subviews/%%(self.obName.lower())%%_new_view.php'); ?>
 
   			</td>
   			<td class="pageRight">&nbsp;</td>

@@ -12,7 +12,7 @@
  */
 if (!function_exists('getAll%(Name)sFromDB')) {
 	function getAll%(Name)sFromDB($db) {
-		$sql = "SELECT %(keyVariable), %(listOfFieldsForSQL) from %(tableName) ";
+		$sql = "%(helper_selectAll)";
 		$query = $db->query($sql);
 
 		// recuperer les enregistrements
@@ -27,13 +27,10 @@ if (!function_exists('getAll%(Name)sFromDB')) {
 
 /**
  * Insere un nouvel enregistrement
- * @param object $db database object
- * @param string ...
- * @return number identifiant
  */
 if (!function_exists('insertNew%(Name)')) {
-	function insertNew%(Name)($db, %(listOfFieldsForMethodInsert)) {
-		$data=array( %(listOfFieldsForInsert) );
+	function insertNew%(Name)($db, %(helper_listOfFieldsForMethodInsert)) {
+		$data=array( %(helper_listOfFieldsForInsert) );
 		$db->insert('%(tableName)',$data);
 		return $db->insert_id();
 	}
@@ -43,9 +40,9 @@ if (!function_exists('insertNew%(Name)')) {
  * Mise a jour d'un enregistrement
  */
 if (!function_exists('update%(Name)')) {
-	function update%(Name)($db, $%(keyVariable), %(listOfFieldsForMethodUpdate)) {
-		$sql = "update %(tableName) set %(listOfFieldsForUpdate) where %(keyVariable) = ?";
-		$query = $db->query($sql, array(%(listOfFieldsForMethodUpdate), $%(keyVariable)));
+	function update%(Name)($db, $%(keyVariable), %(helper_listOfFieldsForMethodUpdate)) {
+		$sql = "%(helper_updateSQL)";
+		$query = $db->query($sql, array(%(helper_listOfFieldsForMethodUpdate), $%(keyVariable)));
 	}
 }
 
@@ -54,9 +51,9 @@ if (!function_exists('update%(Name)')) {
  * Suppression d'un enregistrement
  */
 if (!function_exists('delete%(Name)')) {
-	function delete%(Name)($db, $%(keyVariable)) {
-		$sql = "delete from %(tableName) where %(keyVariable) = ?";
-		$query = $db->query($sql, array(%(intConversion)$%(keyVariable)));
+	function delete%(Name)($db, %(dollarKeyVariable)) {
+		$sql = "%(helper_deleteSQL)";
+		$query = $db->query($sql, array(%(dollarKeyVariable)));
 	}
 }
 
@@ -68,10 +65,9 @@ if (!function_exists('delete%(Name)')) {
  * @return array
  */
 if (!function_exists('get%(Name)Row')) {
-	function get%(Name)Row($db, $%(keyVariable)) {
-		$sql = "select %(keyVariable), %(listOfFieldsForSQL) from %(tableName) " .
-		"where %(keyVariable) = ?";
-		$query = $db->query($sql, array($%(keyVariable)));
+	function get%(Name)Row($db, %(dollarKeyVariable)) {
+		$sql = "%(helper_selectWhere)";
+		$query = $db->query($sql, array(%(dollarKeyVariable)));
 		if ($query->num_rows() == 0) {
 			return null;
 		}

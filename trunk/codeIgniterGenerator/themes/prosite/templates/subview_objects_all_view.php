@@ -1,5 +1,5 @@
 %[kind : subViews]
-%[file : %%(self.obName.lower())%%_list_view.php]
+%[file : %%(self.obName.lower())%%s_all_view.php]
 %[path : views/subviews]
 <?php
 ?>
@@ -29,7 +29,26 @@ RETURN = self.dbAndObVariablesList("""<th>(obVar)s
 	?>
 		<tr <?=($even)?('class="even"'):('')?>>
 			<td valign="top"><a title="Modifier ce %%(self.obName)%%" href="<?=base_url()?>index.php/edit%%(self.obName.lower())%%/index/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>"><?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?></a></td>
-			%(listOfVariablesForTableBody)
+			%%allAttributesCode = ""
+
+for field in self.fields:
+	attributeCode = """
+			<td valign="top">"""
+	if field.referencedObject:
+		attributeCode += """<?=$%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s?>
+		""" % { 'display' : field.display, 
+				'referencedObject' : field.referencedObject.obName.lower(),
+				'structureObName' : self.obName.lower(),
+				'dbName' : field.dbName}
+	else:
+		attributeCode += """<?=$%(structureObName)s->%(dbName)s?>""" % {
+			'structureObName' : self.obName.lower(),
+			'dbName' : field.dbName}
+		 
+	allAttributesCode += attributeCode + "</td>"
+	
+RETURN = allAttributesCode
+			%%
 			<td valign="top" align="center">
 				<a href="#" title="Supprimer ce %%(self.obName)%%" onclick="if(confirm('Desirez vous supprimer ce %%(self.obName)%% ?')){location.href='<?=base_url()?>index.php/list%%(self.obName.lower())%%s/delete/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>'}">
 				<img src="<?=base_url()?>www/img/delete_16.png"></a>

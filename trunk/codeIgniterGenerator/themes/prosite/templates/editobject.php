@@ -16,6 +16,18 @@ class Edit%%(self.obName)%% extends CI_Controller {
 		$this->load->helper('template');
 		$this->load->helper('url');
 		$this->load->database();
+%%allAttributeCode = ""
+# inclure les modeles des objets référencés
+
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject:
+		attributeCode += """
+		$this->load->model('%s_model');""" % field.referencedObject.obName
+	allAttributeCode += attributeCode
+	
+RETURN = allAttributeCode
+%%
 	}
 
 
@@ -25,6 +37,21 @@ class Edit%%(self.obName)%% extends CI_Controller {
 	public function index($%%(self.keyFields[0].dbName)%%){
 		$model = %%(self.obName)%%_model::get%%(self.obName)%%($this->db, $%%(self.keyFields[0].dbName)%%);
 		$data['%%(self.obName.lower())%%'] = $model;
+%%allAttributeCode = ""
+# inclure les objets référencés dans l'objet $data
+
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject:
+		attributeCode += """
+		$data['%(referencedObjectLower)sCollection'] = %(referencedObject)s_model::getAll%(referencedObject)ss($this->db);""" % {
+			'referencedObjectLower' : field.referencedObject.obName.lower(),
+			'referencedObject' : field.referencedObject.obName
+		}
+	allAttributeCode += attributeCode
+	
+RETURN = allAttributeCode
+%%
 
 		$this->load->view('edit%%(self.obName.lower())%%_view',$data);
 	}
@@ -42,7 +69,7 @@ RETURN = self.dbAndObVariablesList("$model->(dbVar)s = $this->input->post('(dbVa
 %%
 		$model->update($this->db);
 
-		$this->session->set_flashdata('message', formatInfo('%(self.obName)%% mis a jour'));
+		$this->session->set_flashdata('message', formatInfo('%%(self.obName)%% mis a jour'));
 
 		redirect('list%%(self.obName.lower())%%s/index');
 	}

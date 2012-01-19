@@ -18,10 +18,10 @@ $this->load->helper('template');
 
 <div class="container">  
 	<div id="header">
-		<div class="span-18">
+		<div class="span-16">
 			<img src="<?=base_url() . "www/img/logo.png"?>" style="vertical-align:middle;">
 		</div>
-		<div class="column span-5 last" id="identification">
+		<div class="column span-8 last" id="identification">
 			Utilisateur <i><?= $this->session->userdata('user_name'); ?></i> <!-- <?= $this->session->userdata('user_id') ?> --> &nbsp;
 			<a href="<?=base_url()?>index.php/welcome/logout" title="Logout"><span class="ss_sprite ss_exclamation "></span></a>
 		</div>
@@ -33,7 +33,7 @@ $this->load->helper('template');
 	
 	</div>
 	
-	<div class="prepend-1 append-1">
+	<div class="span-20 prepend-1 append-1">
 
 	<table class="visible">
 		<tr class="header">
@@ -47,7 +47,7 @@ $this->load->helper('template');
 		<tr <?=($even)?('class="even"'):('')?>>
 			<td valign="top"><a title="Modifier ce %(Name)" href="<?=base_url()?>index.php/edit%(name_lower)/index/<?=$%(name_lower)->%(keyVariable)?>"><?=$%(name_lower)->%(keyVariable)?></a></td>
 			%(listOfVariablesForTableBody)
-			<td valign="top">
+			<td valign="top" align="center">
 				<a href="#" title="Supprimer ce %(Name)" onclick="if(confirm('Desirez vous supprimer ce %(Name) ?')){location.href='<?=base_url()?>index.php/list%(name_lower)s/delete/<?=$%(name_lower)->%(keyVariable)?>'}">
 				<img src="<?=base_url()?>www/img/delete_16.png"></a>
 			</td>
@@ -58,7 +58,7 @@ $this->load->helper('template');
 </table>
 <hr>
 <fieldset>
-	<legend><img src="<?=base_url()?>www/img/plus_16.png"> Ajouter un %(Name)</legend>
+	<legend><a name="new"></a><img src="<?=base_url()?>www/img/plus_16.png"> Ajouter un %(Name)</legend>
 
 <?
 $attributes_info = array('name' => 'AddForm');

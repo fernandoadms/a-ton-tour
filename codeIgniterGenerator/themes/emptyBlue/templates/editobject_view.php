@@ -32,7 +32,7 @@ $this->load->helper('template');
 	
 	</div>
 
-	<div class="prepend-1 append-1">
+	<div class="span-20 prepend-1 append-1">
 	
 	<fieldset>
 <?

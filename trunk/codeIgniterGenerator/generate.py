@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding: latin-1
+# coding: utf-8
 
 """
 Copyright (C) 2011 julien CORON - http://julien.coron.free.fr
@@ -30,158 +30,115 @@ Syntaxe:
 
 """
 
-import sys, os, glob, string, ConfigParser
+import sys, os, glob, string, ConfigParser, re
+from code import InteractiveInterpreter
 
-from themes.objects import CIObject
+from objects import CIObject
 
-def generateModel(theme, modelsDirectory, structure):
-	if not os.path.exists(modelsDirectory):
-		os.makedirs(modelsDirectory)
+class TemplateFileReader:
+	def __init__(self):
+		self.fileOut = ""
+		self.kind = ""
+		self.filePath = ""
+		self.segments = []
 
-	template_filename = os.path.join("themes", theme, "templates","object_model.php")
-	f = open(template_filename, 'r')
-	rawContent = f.read()
+	def readFile(self, templateFilename):
+		f = open(templateFilename, 'r')
+		print "templateFilename : %s" % templateFilename
+
+		# detection des infos meta sur les premieres lignes
+		regexpMetaSpliter = re.compile('^%\[\s*(?P<key>.+)\s*:\s*(?P<value>.+)\s*\]\s*$')
+		rawContent = ""
+		metaIfFinished = False
+		metaInfos = {}
+
+		for line in f:
+			matchGroupMeta = regexpMetaSpliter.match(line)
+			if matchGroupMeta and not metaIfFinished:
+				#DEBUG print matchGroupMeta.groupdict()
+				metaInfos[matchGroupMeta.groupdict()['key'].strip()] = matchGroupMeta.groupdict()['value'].strip()
+			else:
+				#DEBUG if not metaIfFinished:
+				#DEBUG 	print line
+				metaIfFinished = True
+				rawContent += line
+		#DEBUG 
+		#print metaInfos
+		if metaInfos.has_key('file') :
+			self.fileOut = self.extractSegments(metaInfos['file'])
+		else:
+			self.fileOut = ""
+
+		if metaInfos.has_key('kind') :
+			self.kind = metaInfos['kind']
+		else:
+			self.kind = ""
+
+		if metaInfos.has_key('path') :
+			self.filePath = self.extractSegments(metaInfos['path'])
+		else:
+			self.filePath = ""
+
+		self.segments = self.extractSegments(rawContent)
+
+
+	def extractSegments(self, rawContent):
+		# recuperaton des segments de code
+		wasCode = False
+		segments = []
+		for item in rawContent.split("%%"):
+			if wasCode:
+				if re.match("\(.*\)", item):
+					segments.append( PythonLine(item) )
+					#DEBUG print "PythonLine : %s" % item
+				else:
+					segments.append( PythonSegment(item) )
+					#DEBUG print "PythonSegment : %s" % item
+			else:
+				segments.append( StringSegment(item) )
+			wasCode = not wasCode
+		return segments
+
+
+	def generateSegmentsFor(self, structure):
+		return self.generateSegmentObjectFor(self.segments, structure)
+
+	def generateSegmentObjectFor(self, segmentArray, structure):
+		content = ""
+		for segment in segmentArray:
+			content += segment.toString(structure)
+		return content
+
+
+class StringSegment:
+	def __init__(self, data):
+		self.data = data
+
+	def toString(self, structure):
+		return self.data
+
+class PythonSegment:
+	def __init__(self, data):
+		self.data = data.strip()
 	
-	content = string.replace(rawContent,"%(Name)", unicode(structure.obName) )
-	content = string.replace(content,"%(name_lower)",  unicode(structure.obName.lower()) )
-	content = string.replace(content,"%(listOfVariablesForDeclaration)", unicode(structure.listOfVariablesForDeclaration()) )
-	content = string.replace(content,"%(rowExtraction)", unicode(structure.rowExtraction()) )
-	content = string.replace(content,"%(keyVariable)", unicode(structure.keyFields[0].dbName) )
-	content = string.replace(content,"%(listOfVariablesForMethodSave)", unicode(structure.listOfVariablesForMethodSave()) )
-	content = string.replace(content,"%(listOfVariablesForMethodUpdate)", unicode(structure.listOfVariablesForMethodUpdate()) )
+	def toString(self, structure):
+		filename='<input>'
+		symbol='exec'
+		localVars = {"self" : structure, "RETURN" : ""}
+		inter = InteractiveInterpreter(localVars)
+		inter.runsource(self.data, filename, symbol)
+		return localVars["RETURN"]
 
-	filename = os.path.join(modelsDirectory, "%s_model.php" % structure.obName.lower() )
-	file = open(filename,'w')
-	file.write(content.encode("utf-8"))
-	file.close()
+class PythonLine:
+	def __init__(self, data):
+		self.data = data.strip()
 	
-def generateHelper(theme, helpersDirectory, structure):
-	if not os.path.exists(helpersDirectory):
-		os.makedirs(helpersDirectory)
+	def toString(self, structure):
+		return eval(self.data, {"self" : structure} )
 
-	template_filename = os.path.join("themes", theme, "templates","object_helper.php")
-	f = open(template_filename, 'r')
-	rawContent = f.read()
-	
-	content = string.replace(rawContent,"%(Name)", structure.obName )
-	content = string.replace(content,"%(tableName)", structure.dbTableName )
-
-	listOfFieldsForSelectAllSQL = unicode(structure.listOfKeys(fieldPrefix="", fieldSuffix = ", "))
-	nextString = structure.dbVariablesList("(var)s", 'var',  '', '', 0, False)
-	if listOfFieldsForSelectAllSQL != "":
-		if nextString != "":
-			listOfFieldsForSelectAllSQL += ", " + nextString
-	else:
-		listOfFieldsForSelectAllSQL = nextString
-	content = string.replace(content,"%(listOfFieldsForSelectAllSQL)", listOfFieldsForSelectAllSQL )
-
-	listOfKeys = unicode(structure.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))
-	content = string.replace(content,"%(keyVariable)", listOfKeys  )
-	
-	content = string.replace(content,"%(dollarKeyVariable)",  unicode(structure.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))  )
-	content = string.replace(content,"%(dollarKeyVariableWithIntConversion)",  unicode(structure.listOfKeys(fieldPrefix="$", fieldSuffix = ", ", withIntConversion=True)) )
-
-	listOfFieldsForSQL = unicode(structure.listOfFieldsForSQL())
-	if listOfFieldsForSQL != "" and listOfKeys != "" :
-		listOfFieldsForSQL = listOfKeys + ", " +listOfFieldsForSQL
-
-	content = string.replace(content,"%(listOfFieldsForSQL)", listOfFieldsForSQL )
-	content = string.replace(content,"%(listOfFieldsForMethodInsert)", unicode(structure.listOfFieldsForMethodInsert()) )
-	content = string.replace(content,"%(listOfFieldsForMethodUpdate)", unicode(structure.listOfFieldsForMethodUpdate()) )
-	content = string.replace(content,"%(listOfFieldsForArrayUpdate)", unicode(structure.listOfFieldsForArrayUpdate()) )
-	content = string.replace(content,"%(listOfFieldsForUpdate)", unicode(structure.listOfFieldsForUpdate()) )
-	content = string.replace(content,"%(listOfFieldsForInsert)", unicode(structure.listOfFieldsForInsert()) )
-	content = string.replace(content,"%(keyVariableEqualsX)", unicode(structure.keyVariableEqualsX()) )
-
-	filename = os.path.join(helpersDirectory, "%s_helper.php" % structure.obName.lower() )
-	file = open(filename,'w')
-	file.write(content.encode("utf-8"))
-	file.close()
-
-def generateControllerList(theme, controllersDirectory, structure):
-	if not os.path.exists(controllersDirectory):
-		os.makedirs(controllersDirectory)
-
-	template_filename = os.path.join("themes", theme, "templates","listobjects.php")
-	f = open(template_filename, 'r')
-	rawContent = f.read()
-
-	content = string.replace(rawContent,"%(Name)", unicode(structure.obName) )
-	content = string.replace(content,"%(name_lower)",  unicode(structure.obName.lower()) )
-	content = string.replace(content,"%(keyVariable)", unicode(structure.keyFields[0].dbName) )
-	content = string.replace(content,"%(listOfVariablesForViewExtraction)", unicode(structure.listOfVariablesForViewExtraction(True)) )
-
-	filename = os.path.join(controllersDirectory, "list%ss.php" % structure.obName.lower() )
-	file = open(filename,'w')
-	file.write(content.encode("utf-8"))
-	file.close()
-
-def generateViewList(theme, viewsDirectory, structure):
-	if not os.path.exists(viewsDirectory):
-		os.makedirs(viewsDirectory)
-
-	template_filename = os.path.join("themes", theme, "templates","listobjects_view.php")
-	f = open(template_filename, 'r')
-	rawContent = f.read()
-
-	content = string.replace(rawContent,"%(Name)", unicode(structure.obName) )
-	content = string.replace(content,"%(name_lower)",  unicode(structure.obName.lower()) )
-	content = string.replace(content,"%(keyVariable)", unicode(structure.keyFields[0].dbName) )
-	content = string.replace(content,"%(listOfVariablesForTableBody)", unicode(structure.listOfVariablesForTableBody()) )
-	content = string.replace(content,"%(listOfVariablesForTableHeader)", unicode(structure.listOfVariablesForTableHeader()) )
-	content = string.replace(content,"%(listOfVariablesForAdding)", unicode(structure.listOfVariablesForAdding()) )
-	content = string.replace(content,"%(javascriptCodeForControls)", unicode(structure.javascriptCodeForControls()) )
-
-	filename = os.path.join(viewsDirectory, "list%ss_view.php" % structure.obName.lower() )
-	file = open(filename,'w')
-	file.write(content.encode("utf-8"))
-	file.close()
-
-def generateControllerEdit(theme, controllersDirectory, structure):
-	if not os.path.exists(controllersDirectory):
-		os.makedirs(controllersDirectory)
-
-	template_filename = os.path.join("themes", theme, "templates","editobject.php")
-	f = open(template_filename, 'r')
-	rawContent = f.read()
-
-	content = string.replace(rawContent,"%(Name)", unicode(structure.obName) )
-	content = string.replace(content,"%(name_lower)",  unicode(structure.obName.lower()) )
-	content = string.replace(content,"%(obNameKeyVariable)", unicode(structure.keyFields[0].obName) )
-	content = string.replace(content,"%(keyVariable)", unicode(structure.keyFields[0].dbName) )
-	content = string.replace(content,"%(listOfVariablesForViewExtraction)", unicode(structure.listOfVariablesForViewExtraction(False)) )
-
-	filename = os.path.join(controllersDirectory, "edit%s.php" % structure.obName.lower() )
-	file = open(filename,'w')
-	file.write(content.encode("utf-8"))
-	file.close()
-
-def generateViewEdit(theme, viewsDirectory, structure):
-	if not os.path.exists(viewsDirectory):
-		os.makedirs(viewsDirectory)
-
-	template_filename = os.path.join("themes", theme, "templates","editobject_view.php")
-	f = open(template_filename, 'r')
-	rawContent = f.read()
-
-	content = string.replace(rawContent,"%(Name)", unicode(structure.obName) )
-	content = string.replace(content,"%(name_lower)", unicode(structure.obName.lower()) )
-	content = string.replace(content,"%(obNameKeyVariable)", unicode(structure.keyFields[0].obName) )
-	content = string.replace(content,"%(keyVariable)", unicode(structure.keyFields[0].dbName) )
-	content = string.replace(content,"%(listOfVariablesForEditing)", unicode(structure.listOfVariablesForEditing()) )
-	content = string.replace(content,"%(javascriptCodeForControls)", unicode(structure.javascriptCodeForControls()) )
-
-
-	filename = os.path.join(viewsDirectory, "edit%s_view.php" % structure.obName.lower() )
-	file = open(filename,'w')
-	file.write(content.encode("utf-8"))
-	file.close()
 
 
 def genrateSQL(theme, sqlDirectory, databaseName, structure):
-	if not os.path.exists(sqlDirectory):
-		os.makedirs(sqlDirectory)
-
 	content = structure.createSQLTableScript(databaseName)
 
 	filename = os.path.join(sqlDirectory, "cretab%s.sql" % structure.obName.lower() )
@@ -190,27 +147,63 @@ def genrateSQL(theme, sqlDirectory, databaseName, structure):
 	file.close()
 
 
+def generateTemplates(rootFiles, readerTemplates, kind):
+	# generation du fichier a partir du template
+	if not readerTemplates.has_key(kind):
+		print "No kind <%s>:" % kind
+		return
+	print "  Generating files of kind <%s>:" % kind
+	for reader in readerTemplates[kind]:
+		myDirectory = os.path.join(rootFiles, reader.generateSegmentObjectFor(reader.filePath, structure) )
+		if not os.path.exists(myDirectory):
+			os.makedirs(myDirectory)
+		content = reader.generateSegmentsFor(structure)
+
+		#print "fileOut : %s" % reader.fileOut
+		#print reader.generateSegmentObjectFor(reader.fileOut, structure)
+		filename = os.path.join(myDirectory, reader.generateSegmentObjectFor(reader.fileOut, structure) )
+		file = open(filename,'w')
+		file.write(content.encode("utf-8"))
+		file.close()
+		print "    File <%s> succeffuly generated:" % filename
 
 if __name__ == '__main__':	
 
 	# lecture du fichier de config
 	config = ConfigParser.ConfigParser()
 	config.readfp(open('theme.cfg'))
-	theme = config.get('global', 'theme')
-	CIRootFiles = config.get('generation', 'outDirFor_Classes')
-	SQLFiles = config.get('generation', 'outDirFor_SQL')
-	databaseName = config.get('generation', 'database')
+	theme = config.get('global', 'theme').strip()
+	CIRootFiles = config.get('generation', 'outDirFor_Classes').strip()
+	SQLFiles = config.get('generation', 'outDirFor_SQL').strip()
+	generateObjects = config.get('generation','generate').strip()
+	databaseName = config.get('generation', 'database').strip()
 
-	#import du theme
+	# import du theme
 	print "Using theme <"+ theme +">..."
-	fullModuleName = "themes." + theme + ".writer"
-	module = __import__(fullModuleName)
-	themeModule = getattr( getattr(module,theme), "writer")
 
-	
+	# découpage de generateObjects en liste d'items à générer
+	kindsToGenerate = []
+	if generateObjects.find("all") > -1:
+		kindsToGenerate = "helpers,controllers,views,subViews,baseModels,models,sql".split(",")
+	else:
+		for item in generateObjects.split(","):
+			kindsToGenerate.append(item.strip())
+
+
 	if len(sys.argv) < 2:
 		print "Syntax : " + sys.argv[0] + " <fileObject0.xml> [fileObject1.xml]"
 		sys.exit(1)
+
+	# recuperation de tous les fichiers template
+	allTemplates = {}
+	for templateFilename in glob.glob(os.path.join("themes", theme, "templates","*.php")):
+		#DEBUG print templateFilename
+		reader = TemplateFileReader()
+		reader.readFile(templateFilename)
+		if reader.kind != "":
+			if not allTemplates.has_key(reader.kind) :
+				allTemplates[reader.kind] = []
+			allTemplates[reader.kind].append(reader)
 
 
 	i = 1
@@ -219,29 +212,20 @@ if __name__ == '__main__':
 
 		print "-Object : " + aFilename
 
-		structure = themeModule.WriterObject()
+		structure = CIObject()
 		structure.fromXML(aFilename)
-	
-		generateModel(theme, os.path.join(CIRootFiles,"models"), structure)
 
-		generateHelper(theme, os.path.join(CIRootFiles,"helpers"), structure)
-
-		generateControllerList(theme, os.path.join(CIRootFiles,"controllers"), structure)
-		generateControllerEdit(theme, os.path.join(CIRootFiles,"controllers"), structure)
-
-		generateViewList(theme, os.path.join(CIRootFiles,"views"), structure)
-		generateViewEdit(theme, os.path.join(CIRootFiles,"views"), structure)
-		print "   CI objects generated in " + CIRootFiles
-	
-
-		genrateSQL(theme, SQLFiles, databaseName, structure )
-		print "   SQL script generated in " + SQLFiles
+		for kind in kindsToGenerate:
+			# cas particulier du SQL
+			if kind == "sql":
+				genrateSQL(theme, SQLFiles, databaseName, structure )
+			else:
+				# générer les fichiers PHP de template
+				generateTemplates(CIRootFiles, allTemplates, kind)
 
 		i += 1
 
 	print "Done."
 	sys.exit(0)
-
-
 
 

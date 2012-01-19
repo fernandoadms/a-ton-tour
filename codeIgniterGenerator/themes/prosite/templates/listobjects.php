@@ -1,5 +1,5 @@
 %[kind : controllers]
-%[file : list%%(self.obName.lower())%%.php] 
+%[file : list%%(self.obName.lower())%%s.php] 
 %[path : controllers]
 <?php
 /*
@@ -20,6 +20,19 @@ class List%%(self.obName)%%s extends CI_Controller {
 		$this->load->helper('template');
 		$this->load->helper('url');
 		$this->load->database();
+%%allAttributeCode = ""
+# inclure les modeles des objets référencés
+
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject:
+		attributeCode += """
+		$this->load->model('%s_model');""" % field.referencedObject.obName
+	allAttributeCode += attributeCode
+	
+RETURN = allAttributeCode
+%%
+		
 	}
 
 	/**
@@ -55,6 +68,22 @@ class List%%(self.obName)%%s extends CI_Controller {
 		
 		// recuperation des donnees
 		$data['%%(self.obName.lower())%%s'] = %%(self.obName)%%_model::getAll%%(self.obName)%%s($this->db, $orderBy, $asc, $config['per_page'], $offset);
+		%%allAttributeCode = ""
+# inclure les objets référencés dans l'objet $data
+
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject:
+		attributeCode += """
+		$data['%(referencedObjectLower)sCollection'] = %(referencedObject)s_model::getAll%(referencedObject)ss($this->db);""" % {
+			'referencedObjectLower' : field.referencedObject.obName.lower(),
+			'referencedObject' : field.referencedObject.obName
+		}
+	allAttributeCode += attributeCode
+	
+RETURN = allAttributeCode
+%%
+				
 		$this->load->view('list%%(self.obName.lower())%%s_view', $data);
 	}
 

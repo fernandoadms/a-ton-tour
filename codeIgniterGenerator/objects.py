@@ -114,19 +114,21 @@ class CIObject:
 			field.sysout()			
 		
 	""" replace de maniere generique le texte template avec les donnees de la structure d'objet
-	"""	
+	"""
 	def dbAndObVariablesList(self, template, dbName, obName, indent=1, includesKey=True):
 		variables = ""
 		if includesKey :
-			variables = template.replace("(%s)s" % dbName, self.keyFields[0].dbName)
-			variables = variables.replace("(%s)s" % obName, self.keyFields[0].obName)
-	
+			for variable in self.keyFields:
+				variableDeclaration = ""
+				variableDeclaration = template.replace("(%s)s" % dbName, variable.dbName)
+				variableDeclaration = variableDeclaration.replace("(%s)s" % obName, variable.obName)
+				variables += variableDeclaration
 		prefix = ", "
 		if indent > 0 :
 			prefix = "\n" + ("\t"*indent)
 			 
 		for variable in self.nonKeyFields:
-			variableDeclaration = "";
+			variableDeclaration = ""
 		
 			variableDeclaration = template.replace("(%s)s" % dbName, variable.dbName)
 			variableDeclaration = variableDeclaration.replace("(%s)s" % obName, variable.obName)
@@ -197,5 +199,17 @@ class CIObject:
 		variables = variables[:len(variables)-len(suffix)]
 		return variables
 
+	def listOfKeys(self, fieldPrefix = "", fieldSuffix = "", withIntConversion = False):
+		resultString = ""
+		for field in self.keyFields:
+			if field.sqlType == "int" and withIntConversion:
+				resultString += ("(int)"+fieldPrefix + field.dbName + fieldSuffix)
+			else:
+				resultString += (fieldPrefix+ field.dbName + fieldSuffix)
 
+		if len(fieldSuffix) > 0:
+			suffixLength = 0 - len(fieldSuffix)
+			return resultString[:suffixLength]
+		else:
+			return resultString
 

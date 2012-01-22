@@ -38,7 +38,7 @@ RETURN = allAttributeCode
 	/**
 	 * Affichage des %%(self.obName)%%s
 	 */
-	public function index($orderBy = null, $asc = null, $page = 0){
+	public function index($orderBy = null, $asc = null, $offset = 0){
 		// preparer le tri
 		if($orderBy == null) {
 			$orderBy = '%%(self.keyFields[0].dbName)%%';
@@ -64,7 +64,6 @@ RETURN = allAttributeCode
 		$config['uri_segment'] = '5'; // where the page number is in the URI segment 
 		$this->pagination->initialize($config);
 		$data['pagination'] = $this->pagination;
-		$offset = $page * $config['per_page'];
 		
 		// recuperation des donnees
 		$data['%%(self.obName.lower())%%s'] = %%(self.obName)%%_model::getAll%%(self.obName)%%s($this->db, $orderBy, $asc, $config['per_page'], $offset);

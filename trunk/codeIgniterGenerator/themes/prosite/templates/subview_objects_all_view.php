@@ -32,20 +32,21 @@ RETURN = self.dbAndObVariablesList("""<th>(obVar)s
 			%%allAttributesCode = ""
 
 for field in self.fields:
-	attributeCode = """
-			<td valign="top">"""
-	if field.referencedObject:
-		attributeCode += """<?=$%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s?>
-		""" % { 'display' : field.display, 
-				'referencedObject' : field.referencedObject.obName.lower(),
+	if field.dbName != self.keyFields[0].dbName:
+		attributeCode = """
+				<td valign="top">"""
+		if field.referencedObject:
+			attributeCode += """<?=$%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s?>
+			""" % { 'display' : field.display, 
+					'referencedObject' : field.referencedObject.obName.lower(),
+					'structureObName' : self.obName.lower(),
+					'dbName' : field.dbName}
+		else:
+			attributeCode += """<?=$%(structureObName)s->%(dbName)s?>""" % {
 				'structureObName' : self.obName.lower(),
 				'dbName' : field.dbName}
-	else:
-		attributeCode += """<?=$%(structureObName)s->%(dbName)s?>""" % {
-			'structureObName' : self.obName.lower(),
-			'dbName' : field.dbName}
-		 
-	allAttributesCode += attributeCode + "</td>"
+			 
+		allAttributesCode += attributeCode + "</td>"
 	
 RETURN = allAttributesCode
 			%%

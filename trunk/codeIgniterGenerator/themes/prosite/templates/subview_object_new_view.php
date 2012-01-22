@@ -54,7 +54,7 @@ for field in self.fields:
 	</tr>"""
 
 	if field.autoincrement:
-		attributeCode = "<!-- AUTO_INCREMENT : DO NOT DISPLAY THIS ATTRIBUTE -- " + attributeCode + " -->"
+		attributeCode = "<!-- AUTO_INCREMENT : DO NOT DISPLAY THIS ATTRIBUTE - " + attributeCode + " -->"
 
 	# ajouter le nouvel attribut, avec indentation si ce n'est pas le premier
 	if allAttributesCode != "":

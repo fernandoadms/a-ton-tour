@@ -25,7 +25,7 @@ for field in self.fields:
 	if not field.nullable:
 		attributeCode += "* "
 
-	attributeCode += """%(obName)s</label> : </td>
+	attributeCode += """%(obName)s</label> : &nbsp; </td>
 		<td>""" % { 'obName' : field.obName }
 	if field.isKey:
 		attributeCode += """<input type="hidden" id="%(dbName)s" value="<?= $%(structureObName)s->%(dbName)s ?>" """ % { 'dbName' : field.dbName, 'structureObName' : self.obName.lower() }
@@ -45,7 +45,7 @@ for field in self.fields:
 					'structureObName' : self.obName.lower(),
 					'dbName' : field.dbName }
 					
-		if field.sqlType.upper() == "DATE":
+		elif field.sqlType.upper() == "DATE":
 			attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" value="<?= $%(structureObName)s->%(dbName)s ?>" size="8" maxlength="10"> <span id="btn_%(dbName)s" class="ss_sprite ss_calendar">&nbsp;</span> """ % { 'dbName' : field.dbName, 'structureObName' : self.obName.lower() }
 		elif field.sqlType.upper() == "TEXT":
 			attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s"><?= $%(structureObName)s->%(dbName)s ?></textarea>""" % { 'dbName' : field.dbName, 'structureObName' : self.obName.lower() }
@@ -56,7 +56,7 @@ for field in self.fields:
 		</tr>"""
 
 	if field.autoincrement:
-		attributeCode = "<!-- AUTO_INCREMENT : DO NOT DISPLAY THIS ATTRIBUTE -- " + attributeCode + " -->"
+		attributeCode = "<!-- AUTO_INCREMENT : DO NOT DISPLAY THIS ATTRIBUTE - " + attributeCode + " -->"
 
 	# ajouter le nouvel attribut, avec indentation si ce n'est pas le premier
 	if allAttributesCode != "":

@@ -8,7 +8,7 @@
  */
 
 /***************************************************************************
- * DO NOT MODIFY THIS FILE, IT WILL BE GENERATE
+ * DO NOT MODIFY THIS FILE, IT IS GENERATED
  ***************************************************************************/
 
 abstract class %%(self.obName)%%Base_model extends CI_Model {
@@ -181,7 +181,7 @@ else:
 
 	
 	/***************************************************************************
-	 * DO NOT MODIFY THIS FILE, IT WILL BE GENERATE
+	 * DO NOT MODIFY THIS FILE, IT IS GENERATED
 	 ***************************************************************************/
 
 }

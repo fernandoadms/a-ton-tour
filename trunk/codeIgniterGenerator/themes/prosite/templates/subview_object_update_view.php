@@ -69,7 +69,7 @@ RETURN = allAttributesCode
 		<tr>
 			<td></td>
 			<td>
-				<button onclick="document.forms['EditForm'].sumbit()" class="form-submit">
+				<button onclick="document.forms['EditForm'].submit()" class="form-submit">
 					Enregistrer
 				</button>
 				<button onclick="document.location.href='<?=base_url()?>index.php/list%%(self.obName.lower())%%s';return false;" class="form-back">

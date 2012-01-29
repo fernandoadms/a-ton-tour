@@ -137,30 +137,6 @@ class CIObject:
 				variables += prefix
 			variables += variableDeclaration
 		return variables
-	
-
-	def createSQLTableScript(self, databaseName):
-		content = "CREATE TABLE `%(databaseName)s`.`%(object)s` (\n" % { 'databaseName': databaseName, 'object' : self.dbTableName }
-		allAttributesCode = ""
-
-		for field in self.fields:
-			if allAttributesCode != "":
-				allAttributesCode += ", \n"
-
-			attributeCode = "\t`%(dbName)s` %(sqlType)s " % { 'dbName' : field.dbName,
-				  'sqlType' : field.sqlType
-				}
-			if not field.nullable:
-				attributeCode += "NOT NULL "
-			if field.autoincrement:
-				attributeCode += "AUTO_INCREMENT "
-			if field.isKey:
-				attributeCode += "PRIMARY KEY "
-			attributeCode += "COMMENT '%(desc)s'" % { 'desc' : field.description.replace("'","\\'") }
-			allAttributesCode += attributeCode
-
-		content += allAttributesCode + "\n);\n"
-		return content
 
 
 	def dbVariablesList(self, template, variableName, typeName="", descrName="", indent=1, includesKey=True, suffix=""):

@@ -66,7 +66,7 @@ RETURN =  allAttributesCode
 		<tr>
 			<td></td>
 			<td>
-				<button onclick="document.forms['AddForm'].sumbit()" class="form-submit">Ajouter</button>
+				<button onclick="document.forms['AddForm'].submit()" class="form-submit">Ajouter</button>
 			</td>
 		</tr>
 	</table>

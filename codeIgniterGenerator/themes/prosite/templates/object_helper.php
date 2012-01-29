@@ -110,8 +110,13 @@ RETURN = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKe
 if (!function_exists('delete%%(self.obName)%%')) {
 	function delete%%(self.obName)%%($db, %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%) {
 		$db->delete('%%(self.dbTableName)%%', array(%%
-includesKey = True
-RETURN = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKey)%%)); 
+allVariables = ""
+for field in self.keyFields:
+	if allVariables != "":
+		allVariables += ", "
+	allVariables += """'%(variable)s'=>$%(variable)s""" % {'variable' : field.dbName }
+RETURN = allVariables
+%%)); 
 	}
 }
 

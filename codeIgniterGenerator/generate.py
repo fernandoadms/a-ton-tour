@@ -137,16 +137,6 @@ class PythonLine:
 		return eval(self.data, {"self" : structure} )
 
 
-
-def genrateSQL(theme, sqlDirectory, databaseName, structure):
-	content = structure.createSQLTableScript(databaseName)
-
-	filename = os.path.join(sqlDirectory, "cretab%s.sql" % structure.obName.lower() )
-	file = open(filename,'w')
-	file.write(content.encode("utf-8"))
-	file.close()
-
-
 def generateTemplates(rootFiles, readerTemplates, kind):
 	# generation du fichier a partir du template
 	if not readerTemplates.has_key(kind):
@@ -174,7 +164,6 @@ if __name__ == '__main__':
 	config.readfp(open('theme.cfg'))
 	theme = config.get('global', 'theme').strip()
 	CIRootFiles = config.get('generation', 'outDirFor_Classes').strip()
-	SQLFiles = config.get('generation', 'outDirFor_SQL').strip()
 	generateObjects = config.get('generation','generate').strip()
 	databaseName = config.get('generation', 'database').strip()
 
@@ -196,7 +185,7 @@ if __name__ == '__main__':
 
 	# recuperation de tous les fichiers template
 	allTemplates = {}
-	for templateFilename in glob.glob(os.path.join("themes", theme, "templates","*.php")):
+	for templateFilename in glob.glob(os.path.join("themes", theme, "templates","*.*")):
 		#DEBUG print templateFilename
 		reader = TemplateFileReader()
 		reader.readFile(templateFilename)
@@ -216,12 +205,8 @@ if __name__ == '__main__':
 		structure.fromXML(aFilename)
 
 		for kind in kindsToGenerate:
-			# cas particulier du SQL
-			if kind == "sql":
-				genrateSQL(theme, SQLFiles, databaseName, structure )
-			else:
-				# générer les fichiers PHP de template
-				generateTemplates(CIRootFiles, allTemplates, kind)
+			# générer les fichiers de template
+			generateTemplates(CIRootFiles, allTemplates, kind)
 
 		i += 1
 

@@ -1,27 +1,59 @@
+%[kind : controllers]
+%[file : edit%%(self.obName.lower())%%.php] 
+%[path : controllers]
 <?php
 /*
  * Created by generator
  *
  */
 
-class Edit%(Name) extends Controller {
+class Edit%%(self.obName)%% extends CI_Controller {
 
-	function Edit%(Name)(){
-		parent::Controller();
-		$this->load->model('%(Name)_model');
+	function __construct(){
+		parent::__construct();
+		$this->load->model('%%(self.obName)%%_model');
 		$this->load->library('session');
+		$this->load->helper('template');
 		$this->load->helper('url');
+		$this->load->database();
+%%allAttributeCode = ""
+# inclure les modeles des objets référencés
+
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject:
+		attributeCode += """
+		$this->load->model('%s_model');""" % field.referencedObject.obName
+	allAttributeCode += attributeCode
+	
+RETURN = allAttributeCode
+%%
 	}
 
 
 	/**
 	 * Affichage des infos
 	 */
-	public function index($%(keyVariable)){
-		$model = %(Name)_model::get%(Name)($this->db, $%(keyVariable));
-		$data['%(name_lower)'] = $model;
+	public function index($%%(self.keyFields[0].dbName)%%){
+		$model = %%(self.obName)%%_model::get%%(self.obName)%%($this->db, $%%(self.keyFields[0].dbName)%%);
+		$data['%%(self.obName.lower())%%'] = $model;
+%%allAttributeCode = ""
+# inclure les objets référencés dans l'objet $data
 
-		$this->load->view('edit%(name_lower)_view',$data);
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject:
+		attributeCode += """
+		$data['%(referencedObjectLower)sCollection'] = %(referencedObject)s_model::getAll%(referencedObject)ss($this->db);""" % {
+			'referencedObjectLower' : field.referencedObject.obName.lower(),
+			'referencedObject' : field.referencedObject.obName
+		}
+	allAttributeCode += attributeCode
+	
+RETURN = allAttributeCode
+%%
+
+		$this->load->view('edit%%(self.obName.lower())%%_view',$data);
 	}
 
 	/**
@@ -29,15 +61,18 @@ class Edit%(Name) extends Controller {
 	 */
 	public function save(){
 		// Mise a jour des donnees en base
-		$model = new %(Name)_model();
-		$model->%(keyVariable) = $this->input->post('%(keyVariable)');
-		%(listOfVariablesForViewExtraction)
+		$model = new %%(self.obName)%%_model();
+		$model->%%(self.keyFields[0].dbName)%% = $this->input->post('%%(self.keyFields[0].dbName)%%');
+		%%
+includesKey = False;
+RETURN = self.dbAndObVariablesList("$model->(dbVar)s = $this->input->post('(dbVar)s'); ", 'dbVar', 'obVar', 2, includesKey)
+%%
 		$model->update($this->db);
 
-		$this->session->set_flashdata('message', '%(Name) mis a jour');
+		$this->session->set_flashdata('message', formatInfo('%%(self.obName)%% mis a jour'));
 
-		redirect('list%(name_lower)s/index'); 
+		redirect('list%%(self.obName.lower())%%s/index');
 	}
-	
+
 }
 ?>

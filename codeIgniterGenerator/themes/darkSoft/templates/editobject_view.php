@@ -1,3 +1,6 @@
+%[kind : view]
+%[file : edit%%(self.obName.lower())%%_view.php]
+%[path : views]
 <?php
 /*
  * Created by generator
@@ -6,117 +9,12 @@
 
 $this->load->helper('form');
 $this->load->helper('url');
-$this->load->helper('views');
+$this->load->helper('template');
 ?>
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Editer un %(name_lower)</title>
-<link rel="stylesheet" href="<?=base_url()?>www/css/screen.css" type="text/css" media="screen" title="default" />
-<!--[if IE]>
-<link rel="stylesheet" media="all" type="text/css" href="<?=base_url()?>www/css/pro_dropline_ie.css" />
-<![endif]-->
-
-<!--  jquery core -->
-<script src="<?=base_url()?>www/js/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
-
-<!--  checkbox styling script -->
-<script src="<?=base_url()?>www/js/jquery/ui.core.js" type="text/javascript"></script>
-<script src="<?=base_url()?>www/js/jquery/ui.checkbox.js" type="text/javascript"></script>
-<script src="<?=base_url()?>www/js/jquery/jquery.bind.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(function(){
-	$('input').checkBox();
-	$('#toggle-all').click(function(){
- 	$('#toggle-all').toggleClass('toggle-checked');
-	$('#mainform input[type=checkbox]').checkBox('toggle');
-	return false;
-	});
-});
-</script>  
-
-<![if !IE 7]>
-
-<!--  styled select box script version 1 -->
-<script src="<?=base_url()?>www/js/jquery/jquery.selectbox-0.5.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('.styledselect').selectbox({ inputClass: "selectbox_styled" });
-});
-</script>
- 
-
-<![endif]>
-
-<!--  styled select box script version 2 --> 
-<script src="<?=base_url()?>www/js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('.styledselect_form_1').selectbox({ inputClass: "styledselect_form_1" });
-	$('.styledselect_form_2').selectbox({ inputClass: "styledselect_form_2" });
-});
-</script>
-
-<!--  styled select box script version 3 --> 
-<script src="<?=base_url()?>www/js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('.styledselect_pages').selectbox({ inputClass: "styledselect_pages" });
-});
-</script>
-
-<!--  styled file upload script --> 
-<script src="<?=base_url()?>www/js/jquery/jquery.filestyle.js" type="text/javascript"></script>
-<script type="text/javascript" charset="utf-8">
-  $(function() {
-      $("input.file_1").filestyle({ 
-          image: "<?=base_url()?>www/images/forms/choose-file.gif",
-          imageheight : 21,
-          imagewidth : 78,
-          width : 310
-      });
-  });
-</script>
-
-<!-- Custom jquery scripts -->
-<script src="<?=base_url()?>www/js/jquery/custom_jquery.js" type="text/javascript"></script>
- 
-<!-- Tooltips -->
-<script src="<?=base_url()?>www/js/jquery/jquery.tooltip.js" type="text/javascript"></script>
-<script src="<?=base_url()?>www/js/jquery/jquery.dimensions.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(function() {
-	$('a.info-tooltip ').tooltip({
-		track: true,
-		delay: 0,
-		fixPNG: true, 
-		showURL: false,
-		showBody: " - ",
-		top: -35,
-		left: 5
-	});
-});
-</script> 
-
-
-<!-- CALENDAR -->
-<script src="<?=base_url()?>www/js/JSCal2-1.8/src/js/jscal2.js"></script>
-<script src="<?=base_url()?>www/js/JSCal2-1.8/src/js/lang/fr.js"></script>
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>www/js/JSCal2-1.8/src/css/jscal2.css" />
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>www/js/JSCal2-1.8/src/css/border-radius.css" />
-<style>
-.DynarchCalendar-title { padding-left:40px; }
-</style>
-<!-- /CALENDAR -->
-
-<!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
-<script src="<?=base_url()?>www/js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-$(document).pngFix( );
-});
-</script>
+<? echo htmlHeader('Editer un %%(self.obName)%%'); ?>
 </head>
 <body>
 
@@ -131,27 +29,9 @@ $(document).pngFix( );
 	<a href=""><img src="<?=base_url()?>www/images/shared/logo.png" width="156" height="40" alt="" /></a>
 	</div>
 	<!-- end logo -->
-	<!--  start top-search -->
-	<div id="top-search">
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-		<td><input type="text" value="Search" onblur="if (this.value=='') { this.value='Search'; }" onfocus="if (this.value=='Search') { this.value=''; }" class="top-search-inp" /></td>
-		<td>
-		<select  class="styledselect">
-			<option value=""> All</option>
-			<option value=""> Products</option>
-			<option value=""> Categories</option>
-			<option value="">Clients</option>
-			<option value="">News</option>
-		</select> 
-		</td>
-		<td>
-		<input type="image" src="<?=base_url()?>www/images/shared/top_search_btn.gif"  />
-		</td>
-		</tr>
-		</table>
-	</div>
- 	<!--  end top-search -->
+	
+	<?= htmlSearch() ?>
+	
  	<div class="clear"></div>
 
 </div>
@@ -167,50 +47,8 @@ $(document).pngFix( );
 <!--  start nav-outer -->
 <div class="nav-outer"> 
 
-		<!-- start nav-right -->
-		<div id="nav-right">
-		
-			<div class="nav-divider">&nbsp;</div>
-			<div class="showhide-account"><img src="<?=base_url()?>www/images/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></div>
-			<div class="nav-divider">&nbsp;</div>
-			<a href="" id="logout"><img src="<?=base_url()?>www/images/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
-			<div class="clear">&nbsp;</div>
-		
-			<!--  start account-content -->	
-			<div class="account-content">
-			<div class="account-drop-inner">
-				<a href="" id="acc-settings">Settings</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-details">Personal details </a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-project">Project details</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-inbox">Inbox</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-stats">Statistics</a> 
-			</div>
-			</div>
-			<!--  end account-content -->
-		
-		</div>
-		<!-- end nav-right -->
-
-
-		<!--  start nav -->
-		<div class="nav">
-		<div class="table">
-		
-		<?= htmlNavigation("item","edit"); ?>
-		
-		<div class="clear"></div>
-		</div>
-		<div class="clear"></div>
-		</div>
-		<!--  start nav -->
+	<?= htmlMyAccount() ?>
+	<?= htmlNavigation("item","edit"); ?>
 
 </div>
 <div class="clear"></div>
@@ -227,7 +65,7 @@ $(document).pngFix( );
 
 	<!--  start page-heading -->
 	<div id="page-heading">
-		<h1>Editer un %(name_lower)</h1>
+		<h1>Editer un %%(self.obName)%%</h1>
 	</div>
 	<!-- end page-heading -->
 	
@@ -244,34 +82,9 @@ $(document).pngFix( );
 		<td>
 		<!--  start content-table-inner ...................................................................... START -->
 		<div id="content-table-inner">
-		
-			<!--  start table-content  -->
-			<div id="table-content">
-				<!-- start id-form -->
-				<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
-			
-<?
-$attributes_info = array('name' => 'EditForm');
-$fields_info = array('%(keyVariable)' => $%(name_lower)->%(keyVariable));
-echo form_open_multipart('edit%(name_lower)/save', $attributes_info, $fields_info );
-?>
-		<!-- list of variables - auto-generated : -->
-		%(listOfVariablesForEditing)
-		<tr>
-			<td></td>
-			<td>
-				<input type="submit" value="" class="form-submit" />
-				<input type="button" value="" class="form-retour"
-					onclick="document.location.href='<?=base_url()?>index.php/list%(name_lower)s';return false;" />
-			</td>
-		</tr>
-	</table>
-	%(javascriptCodeForControls)
-<?
-echo form_close('');
-?>
 
-			</div>
+<?php $this->load->view('subviews/%%(self.obName.lower())%%_update_view.php'); ?>
+
 		</div>
 		<!--  end content-table-inner ............................................END  -->
 		</td>

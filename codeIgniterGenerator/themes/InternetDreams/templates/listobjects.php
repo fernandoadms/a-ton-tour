@@ -32,11 +32,6 @@ for field in self.fields:
 RETURN = allAttributeCode
 %%
 
-		$this->session->keep_flashdata('msg_info');
-		$this->session->keep_flashdata('msg_confirm');
-		$this->session->keep_flashdata('msg_warn');
-		$this->session->keep_flashdata('msg_error');
-
 	}
 
 	/**

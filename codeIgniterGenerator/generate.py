@@ -134,7 +134,16 @@ class PythonLine:
 		self.data = data.strip()
 	
 	def toString(self, structure):
-		return eval(self.data, {"self" : structure} )
+		result = ""
+		try:
+			result = eval(self.data, {"self" : structure} )
+		except Exception:
+			print "ERROR while executing this code:"
+			print "------------------------------------------------"
+			print self.data
+			print "------------------------------------------------"
+		
+		return result
 
 
 def generateTemplates(rootFiles, readerTemplates, kind):

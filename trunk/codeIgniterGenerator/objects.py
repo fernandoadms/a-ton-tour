@@ -36,13 +36,16 @@ class Field:
 		self.autoincrement = False
 		self.referencedObject = None
 		self.display = None
+		self.node = None
 	
 	def sysout(self):
 		if self.isKey :
 			print " > %s : %s" % (self.dbName, self.obName)
 		else :
 			print " - %s : %s" % (self.dbName, self.obName)
-			
+		
+	def getAttribute(this, attrName):
+		return this.node.getAttribute(attrName)
 		
 class CIObject:
 	def __init__(self, dbTableName = "", obName = ""):
@@ -86,7 +89,8 @@ class CIObject:
 			if attributeTag.getAttribute("display") != "":
 				aField.display = attributeTag.getAttribute("display")
 				
-
+			# ajout de tous les attributs
+			aField.node = attributeTag
 
 			descriptionDef = attributeTag.getElementsByTagName("description")[0]
 			if descriptionDef.firstChild :

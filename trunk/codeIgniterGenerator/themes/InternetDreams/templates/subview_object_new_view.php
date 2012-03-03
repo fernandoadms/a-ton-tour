@@ -56,10 +56,7 @@ for field in self.fields:
 		<td>
 			""" % { 'obName' : field.obName }
 
-	if field.nullable:
-		cssClass = "inp-form"
-	else:
-		cssClass = "inp-form-error"
+	cssClass = "inp-form"
 			
 	if field.referencedObject:
 		attributeCode += """<select class="styledselect_form_1" name="%(dbName)s" id="%(dbName)s"> """ % { 'dbName' : field.dbName }
@@ -86,8 +83,29 @@ for field in self.fields:
 			<div class="bubble-inner">JPEG, GIF 5MB max / image</div>
 			<div class="bubble-right"></div>
 		""" % { 'dbName' : field.dbName}
+
+	elif field.sqlType.upper()[0:4] == "FLAG":
+		label = field.sqlType[5:-1].replace('"','').replace("'","")
+		attributeCode += """<input type="checkbox" name="%(dbName)s" id="%(dbName)s" value="O"/> &nbsp; %(label)s""" % { 'dbName' : field.dbName, 'label': label.strip() }
+		
+	elif field.sqlType.upper()[0:4] == "ENUM":
+		attributeCode += """<select name="%(dbName)s" id="%(dbName)s" class="styledselect_form_1">""" % { 'dbName' : field.dbName }
+		enumTypes = field.sqlType[5:-1]
+		for enum in enumTypes.split(','):
+			valueAndText = enum.replace('"','').replace("'","").split(':')
+			attributeCode += """<option value="%(value)s">%(text)s</option>""" % {'value': valueAndText[0].strip(), 'text': valueAndText[1].strip()}
+		attributeCode += "</select>"
+
 	else:
-		attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" class="%(cssClass)s">""" % { 'dbName' : field.dbName, 'cssClass' : cssClass}
+		attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" class="%(cssClass)s" """ % { 'dbName' : field.dbName, 'cssClass' : cssClass}
+		if field.getAttribute("check") :
+			attributeCode += """onblur="checkField(this,%(regexp)s)" """ % {'regexp' : field.getAttribute("check")}
+		attributeCode += """><div id="%(dbName)sMessage" style="display:none;float: right;">
+			<div class="bubble-left"></div>
+			<div class="bubble-inner">Erreur de saisie sur ce champ</div>
+			<div class="bubble-right"></div>
+		</div>""" % {'dbName' : field.dbName}
+		
 
 	attributeCode += """
 		</td>

@@ -92,7 +92,21 @@ if (!function_exists('jquery')) {
 if (!function_exists('customJquery')) {
 	function customJquery(){
 		$htmlCode = '<!-- Custom jquery scripts -->
-<script src="'.base_url().'www/js/jquery/custom_jquery.js" type="text/javascript"></script>';
+<script src="'.base_url().'www/js/jquery/custom_jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+function checkField(inputField, regepx){
+	if( regepx.test(inputField.value) ){
+		inputField.className = "inp-form";
+		$("#"+inputField.id + "Message").hide();
+		return true;
+	}else{
+		inputField.className = "inp-form-error";
+		inputField.focus();
+		$("#"+inputField.id + "Message").show();
+		return false;
+	}
+}
+</script>';
 		return $htmlCode;
 	}
 }

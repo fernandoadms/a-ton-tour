@@ -36,6 +36,11 @@ for field in self.fields:
 					'referencedObject' : field.referencedObject.obName.lower(),
 					'structureObName' : self.obName.lower(),
 					'dbName' : field.dbName}
+		elif field.sqlType.upper()[0:4] == "FLAG":
+			label = field.sqlType[5:-1].replace('"','').replace("'","")
+			attributeCode += """<?= ($%(structureObName)s->%(dbName)s == "O")?("%(label)s"):("")?>""" % {'label' : label,
+				'structureObName' : self.obName.lower(),
+				'dbName' : field.dbName}
 		else:
 			attributeCode += """<?=$%(structureObName)s->%(dbName)s?>""" % {
 				'structureObName' : self.obName.lower(),

@@ -76,7 +76,7 @@ for field in self.fields:
 		attributeCode += """<select name="%(dbName)s" id="%(dbName)s" class="styledselect_form_1">""" % { 'dbName' : field.dbName }
 		enumTypes = field.sqlType[5:-1]
 		for enum in enumTypes.split(','):
-			valueAndText = enum.strip('"').strip("'").split(':')
+			valueAndText = enum.replace('"','').replace("'","").split(':')
 			attributeCode += """<option value="%(value)s" <?= ($%(structureObName)s->%(dbName)s == "%(value)s")?("selected"):("")?> >%(text)s</option>""" % {'value': valueAndText[0].strip(), 
 				'text': valueAndText[1].strip(), 
 				'structureObName' : self.obName.lower(),

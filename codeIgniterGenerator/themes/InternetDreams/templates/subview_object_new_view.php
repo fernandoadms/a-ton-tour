@@ -80,7 +80,7 @@ for field in self.fields:
 	elif field.sqlType.upper() == "FILE":
 		attributeCode += """<input type="file" class="file_1" name="%(dbName)s" id="%(dbName)s">
 			<div class="bubble-left"></div>
-			<div class="bubble-inner">JPEG, GIF 5MB max / image</div>
+			<div class="bubble-inner">2Mo max / fichier</div>
 			<div class="bubble-right"></div>
 		""" % { 'dbName' : field.dbName}
 
@@ -101,9 +101,8 @@ for field in self.fields:
 		if field.getAttribute("check") :
 			attributeCode += """onblur="checkField(this,%(regexp)s)" """ % {'regexp' : field.getAttribute("check")}
 		attributeCode += """><div id="%(dbName)sMessage" style="display:none;float: right;">
-			<div class="bubble-left"></div>
-			<div class="bubble-inner">Erreur de saisie sur ce champ</div>
-			<div class="bubble-right"></div>
+			<div class="error-left"></div>
+			<div class="error-inner"><img src="<?=base_url()?>www/images/glyphs/close.png" align="absmiddle"> &nbsp; Erreur de format</div>
 		</div>""" % {'dbName' : field.dbName}
 		
 

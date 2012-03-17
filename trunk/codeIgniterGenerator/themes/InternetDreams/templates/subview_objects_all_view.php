@@ -20,6 +20,23 @@ RETURN = self.dbAndObVariablesList("""<th class=\"table-header-repeat line-left 
 	</tr>
 <?php
 $even = false;
+%%allAttributes = "" 
+for field in self.fields:
+	if field.dbName != self.keyFields[0].dbName:
+		if field.sqlType.upper()[0:4] == "ENUM":
+			enumTypes = field.sqlType[5:-1]
+			for enum in enumTypes.split(','):
+				valueAndText = enum.replace('"','').replace("'","").split(':')
+				attributeCode = "\"%(value)s\"=>\"%(text)s\"" % {'value': valueAndText[0].strip(), 
+					'text': valueAndText[1].strip()}
+				if allAttributes != "":
+					allAttributes += ", " + attributeCode
+				else;
+					allAttributes = attributeCode
+			 
+allEnums = "$enum_%(dbName)s = array(%(allAttributes)s);" % {'dbName' : field.dbName, 'allAttributes' : allAttributes }
+RETURN = allEnums
+%%
 foreach($%%(self.obName.lower())%%s as $%%(self.obName.lower())%%):
 ?>
 	<tr <?=($even)?('class="alternate-row"'):('')?>>
@@ -39,6 +56,10 @@ for field in self.fields:
 		elif field.sqlType.upper()[0:4] == "FLAG":
 			label = field.sqlType[5:-1].replace('"','').replace("'","")
 			attributeCode += """<?= ($%(structureObName)s->%(dbName)s == "O")?("%(label)s"):("")?>""" % {'label' : label,
+				'structureObName' : self.obName.lower(),
+				'dbName' : field.dbName}
+		elif field.sqlType.upper()[0:4] == "ENUM":
+			attributeCode += """<?=$enum_%(dbName)s[$%(structureObName)s->%(dbName)s]?>""" % {
 				'structureObName' : self.obName.lower(),
 				'dbName' : field.dbName}
 		else:
@@ -104,7 +125,7 @@ endforeach; ?>
 	<!-- Pagination -->
 	<table class="pagination">
 		<tr>
-			<?php echo $pagination->create_links() ?>
+			<?php if(isset($pagination)){ echo $pagination->create_links(); } ?>
 		</tr>
 	</table>
 	<!-- /Pagination -->

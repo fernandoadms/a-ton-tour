@@ -25,7 +25,7 @@ for field in self.fields:
 	
 	valueCode = "<?= $%(structureObName)s->%(dbName)s ?>" % { 'structureObName': self.obName.lower(), 'dbName' : field.dbName }
 	
-	attributeCode += """<tr><td nowrap><label title="%(desc)s" for="%(dbName)s">""" % { 'dbName' : field.dbName, 'desc' : field.description }
+	attributeCode += """<tr><td nowrap style="vertical-align: top; padding-top: 6px;"><label title="%(desc)s" for="%(dbName)s">""" % { 'dbName' : field.dbName, 'desc' : field.description }
 
 	if not field.nullable:
 		attributeCode += "* "
@@ -88,14 +88,16 @@ for field in self.fields:
 		attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" class="%(cssClass)s" value="%(valueCode)s" """ % { 'dbName' : field.dbName, 
 					'cssClass' : cssClass, 
 					'valueCode' : valueCode}
-		if field.getAttribute("check") :
+		if field.getAttribute("check") and field.getAttribute("check") != "" :
 			attributeCode += """onblur="checkField(this,%(regexp)s)" """ % {'regexp' : field.getAttribute("check")}
-		attributeCode += """><div id="%(dbName)sMessage" style="display:none;float: right;">
-			<div class="bubble-left"></div>
-			<div class="bubble-inner">Erreur de saisie sur ce champ</div>
-			<div class="bubble-right"></div>
-		</div>""" % {'dbName' : field.dbName}
-
+			attributeCode += """><div id="%(dbName)sMessage" style="display:none;float: right;">
+				<div class="bubble-left"></div>
+				<div class="bubble-inner">Erreur de saisie sur ce champ</div>
+				<div class="bubble-right"></div>
+			</div>""" % {'dbName' : field.dbName}
+		else:
+			attributeCode += ">"
+			
 	attributeCode += """
 		</td>
 	</tr>"""

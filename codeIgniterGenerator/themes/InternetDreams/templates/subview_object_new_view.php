@@ -100,10 +100,12 @@ for field in self.fields:
 		attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" class="%(cssClass)s" """ % { 'dbName' : field.dbName, 'cssClass' : cssClass}
 		if field.getAttribute("check") :
 			attributeCode += """onblur="checkField(this,%(regexp)s)" """ % {'regexp' : field.getAttribute("check")}
-		attributeCode += """><div id="%(dbName)sMessage" style="display:none;float: right;">
-			<div class="error-left"></div>
-			<div class="error-inner"><img src="<?=base_url()?>www/images/glyphs/close.png" align="absmiddle"> &nbsp; Erreur de format</div>
-		</div>""" % {'dbName' : field.dbName}
+			attributeCode += """><div id="%(dbName)sMessage" style="display:none;float: right;">
+				<div class="error-left"></div>
+				<div class="error-inner"><img src="<?=base_url()?>www/images/glyphs/close.png" align="absmiddle"> &nbsp; Erreur de format</div>
+			</div>""" % {'dbName' : field.dbName}
+		else:
+			attributeCode += ">"
 		
 
 	attributeCode += """

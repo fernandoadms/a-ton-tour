@@ -105,7 +105,7 @@ for field in self.fields:
 
 	# ajouter le nouvel attribut, avec indentation si ce n'est pas le premier
 	if allAttributesCode != "":
-		allAttributesCode += "\n\t\t" 
+		allAttributesCode += "\n\t" 
 	allAttributesCode += attributeCode
 
 RETURN =  allAttributesCode

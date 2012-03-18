@@ -14,9 +14,16 @@
 		<th class="table-header-check"><a id="toggle-all" ></a> </th>
 		<!-- table header auto-generated : -->
 			%%
-RETURN = self.dbAndObVariablesList("""<th class=\"table-header-repeat line-left minwidth-1\"><a href=\"\">(obVar)s</a></th>""", 'dbVar', 'obVar', 5, False)
+RETURN = self.dbAndObVariablesList("""<th class=\"table-header-repeat line-left minwidth-1\">
+						<a href="<?=base_url()?>index.php/list%ss/index/(dbVar)s/<?= ($orderBy == '(dbVar)s'&& $asc == 'asc')?('desc'):('asc') ?>"
+						<?php if($orderBy == '(dbVar)s'&& $asc == 'asc') {?>
+							class="asc"
+						<?php }else if($orderBy == '(dbVar)s'&& $asc == 'desc') {?>
+							class="desc"
+						<?php }?>
+						>(obVar)s</a></th>""" % self.obName.lower(), 'dbVar', 'obVar', 3, False)
 %%
-		<th class="table-header-options line-left"><a href="">Options</a></th>
+		<th class="table-header-options line-left"><a href="#">Options</a></th>
 	</tr>
 <?php
 $even = false;
@@ -31,7 +38,7 @@ for field in self.fields:
 					'text': valueAndText[1].strip()}
 				if allAttributes != "":
 					allAttributes += ", " + attributeCode
-				else;
+				else:
 					allAttributes = attributeCode
 			 
 allEnums = "$enum_%(dbName)s = array(%(allAttributes)s);" % {'dbName' : field.dbName, 'allAttributes' : allAttributes }

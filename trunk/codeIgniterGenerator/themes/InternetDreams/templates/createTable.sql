@@ -1,6 +1,6 @@
 %[kind : sql]
 %[file : cretab_%%(self.obName.lower())%%.sql]
-%[path : ../../CI_objets]
+%[path : ../sources/sql]
 CREATE TABLE `%%(self.dbTableName)%%` (
 %%content = ""
 allAttributesCode = ""

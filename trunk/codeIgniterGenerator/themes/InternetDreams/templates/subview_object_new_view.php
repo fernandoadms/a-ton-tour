@@ -9,7 +9,7 @@
 
 	<!--  start page-heading -->
 	<div id="page-heading">
-		<h1>Ajouter un %%(self.obName.lower())%%</h1>
+		<h1>Ajouter un %%(self.displayName.lower())%%</h1>
 	</div>
 	<!-- end page-heading -->
 	

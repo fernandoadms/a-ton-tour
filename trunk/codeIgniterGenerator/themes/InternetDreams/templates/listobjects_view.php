@@ -14,7 +14,7 @@ $this->load->helper('views');
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<? echo htmlHeader('Liste des %%(self.obName)%%s'); ?>
+<? echo htmlHeader('Liste des %%(self.displayName)%%s'); ?>
 </head>
 <body> 
 <!-- Start: page-top-outer -->
@@ -65,7 +65,7 @@ $this->load->helper('views');
 	<!--  start page-heading -->
 	<div id="page-heading">
 		<div style="float: left; with: 390px;">
-			<h1>Liste des %%(self.obName.lower())%%s</h1>
+			<h1>Liste des %%(self.displayName.lower())%%s</h1>
 		</div>
 		<div style="float: right; with: 390px;">
 			<?php

@@ -15,7 +15,7 @@ $this->load->helper('views');
 
 <html>
 <head>
-<? echo htmlHeader('Editer un %%(self.obName)%%'); ?>
+<? echo htmlHeader('Editer un %%(self.displayName)%%'); ?>
 </head>
 <body>
 
@@ -66,7 +66,7 @@ $this->load->helper('views');
 
 	<!--  start page-heading -->
 	<div id="page-heading">
-		<h1>Editer un %%(self.obName)%%</h1>
+		<h1>Editer un %%(self.displayName)%%</h1>
 	</div>
 	<!-- end page-heading -->
 	

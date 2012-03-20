@@ -44,7 +44,7 @@ class TemplateFileReader:
 
 	def readFile(self, templateFilename):
 		f = open(templateFilename, 'r')
-		print "templateFilename : %s" % templateFilename
+		print ("templateFilename : %s" % templateFilename)
 
 		# detection des infos meta sur les premieres lignes
 		regexpMetaSpliter = re.compile('^%\[\s*(?P<key>.+)\s*:\s*(?P<value>.+)\s*\]\s*$')
@@ -55,26 +55,26 @@ class TemplateFileReader:
 		for line in f:
 			matchGroupMeta = regexpMetaSpliter.match(line)
 			if matchGroupMeta and not metaIfFinished:
-				#DEBUG print matchGroupMeta.groupdict()
+				#DEBUG print (matchGroupMeta.groupdict())
 				metaInfos[matchGroupMeta.groupdict()['key'].strip()] = matchGroupMeta.groupdict()['value'].strip()
 			else:
 				#DEBUG if not metaIfFinished:
-				#DEBUG 	print line
+				#DEBUG 	print (line)
 				metaIfFinished = True
 				rawContent += line
 		#DEBUG 
-		#print metaInfos
-		if metaInfos.has_key('file') :
+		#print (metaInfos)
+		if 'file' in metaInfos :
 			self.fileOut = self.extractSegments(metaInfos['file'])
 		else:
 			self.fileOut = ""
 
-		if metaInfos.has_key('kind') :
+		if 'kind' in metaInfos :
 			self.kind = metaInfos['kind']
 		else:
 			self.kind = ""
 
-		if metaInfos.has_key('path') :
+		if 'path' in metaInfos :
 			self.filePath = self.extractSegments(metaInfos['path'])
 		else:
 			self.filePath = ""
@@ -90,10 +90,10 @@ class TemplateFileReader:
 			if wasCode:
 				if re.match("\(.*\)", item):
 					segments.append( PythonLine(item) )
-					#DEBUG print "PythonLine : %s" % item
+					#DEBUG print ("PythonLine : %s" % item)
 				else:
 					segments.append( PythonSegment(item) )
-					#DEBUG print "PythonSegment : %s" % item
+					#DEBUG print ("PythonSegment : %s" % item)
 			else:
 				segments.append( StringSegment(item) )
 			wasCode = not wasCode
@@ -138,33 +138,33 @@ class PythonLine:
 		try:
 			result = eval(self.data, {"self" : structure} )
 		except Exception:
-			print "ERROR while executing this code:"
-			print "------------------------------------------------"
-			print self.data
-			print "------------------------------------------------"
+			print ("ERROR while executing this code:")
+			print ("------------------------------------------------")
+			print (self.data)
+			print ("------------------------------------------------")
 		
 		return result
 
 
 def generateTemplates(rootFiles, readerTemplates, kind):
 	# generation du fichier a partir du template
-	if not readerTemplates.has_key(kind):
-		print "No kind <%s>:" % kind
+	if not kind in readerTemplates:
+		print ("No kind <%s>:" % kind)
 		return
-	print "  Generating files of kind <%s>:" % kind
+	print ("  Generating files of kind <%s>:" % kind)
 	for reader in readerTemplates[kind]:
 		myDirectory = os.path.join(rootFiles, reader.generateSegmentObjectFor(reader.filePath, structure) )
 		if not os.path.exists(myDirectory):
 			os.makedirs(myDirectory)
 		content = reader.generateSegmentsFor(structure)
 
-		#print "fileOut : %s" % reader.fileOut
-		#print reader.generateSegmentObjectFor(reader.fileOut, structure)
+		#print ("fileOut : %s" % reader.fileOut)
+		#print (reader.generateSegmentObjectFor(reader.fileOut, structure))
 		filename = os.path.join(myDirectory, reader.generateSegmentObjectFor(reader.fileOut, structure) )
 		file = open(filename,'w')
 		file.write(content.encode("utf-8"))
 		file.close()
-		print "    File <%s> succeffuly generated:" % filename
+		print ("    File <%s> succeffuly generated:" % filename)
 
 if __name__ == '__main__':	
 
@@ -177,7 +177,7 @@ if __name__ == '__main__':
 	databaseName = config.get('generation', 'database').strip()
 
 	# import du theme
-	print "Using theme <"+ theme +">..."
+	print ("Using theme <"+ theme +">...")
 
 	# découpage de generateObjects en liste d'items à générer
 	kindsToGenerate = []
@@ -189,17 +189,17 @@ if __name__ == '__main__':
 
 
 	if len(sys.argv) < 2:
-		print "Syntax : " + sys.argv[0] + " <fileObject0.xml> [fileObject1.xml]"
+		print ("Syntax : " + sys.argv[0] + " <fileObject0.xml> [fileObject1.xml]")
 		sys.exit(1)
 
 	# recuperation de tous les fichiers template
 	allTemplates = {}
 	for templateFilename in glob.glob(os.path.join("themes", theme, "templates","*.*")):
-		#DEBUG print templateFilename
+		#DEBUG print (templateFilename)
 		reader = TemplateFileReader()
 		reader.readFile(templateFilename)
 		if reader.kind != "":
-			if not allTemplates.has_key(reader.kind) :
+			if not reader.kind in allTemplates :
 				allTemplates[reader.kind] = []
 			allTemplates[reader.kind].append(reader)
 
@@ -208,7 +208,7 @@ if __name__ == '__main__':
 	while i < len(sys.argv):
 		aFilename = sys.argv[i]
 
-		print "-Object : " + aFilename
+		print ("-Object : " + aFilename)
 
 		structure = CIObject()
 		structure.fromXML(aFilename)
@@ -219,7 +219,7 @@ if __name__ == '__main__':
 
 		i += 1
 
-	print "Done."
+	print ("Done.")
 	sys.exit(0)
 
 

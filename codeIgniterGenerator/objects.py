@@ -40,9 +40,9 @@ class Field:
 	
 	def sysout(self):
 		if self.isKey :
-			print " > %s : %s" % (self.dbName, self.obName)
+			print (" > %s : %s" % (self.dbName, self.obName))
 		else :
-			print " - %s : %s" % (self.dbName, self.obName)
+			print (" - %s : %s" % (self.dbName, self.obName))
 		
 	def getAttribute(this, attrName):
 		return this.node.getAttribute(attrName)
@@ -51,6 +51,7 @@ class CIObject:
 	def __init__(self, dbTableName = "", obName = ""):
 		self.dbTableName = dbTableName
 		self.obName = obName
+		self.displayName = ""
 		self.description = ""
 		self.isCrossTable = False
 		self.fields = []
@@ -61,7 +62,8 @@ class CIObject:
 		doc = parse(aFilename)
 		objectDef = doc.getElementsByTagName("object")[0]
 		self.dbTableName = objectDef.getAttribute("shortName")
-		self.obName = objectDef.getAttribute("name")
+		self.displayName = objectDef.getAttribute("displayName")
+		self.obName = objectDef.getAttribute("obName")
 		if objectDef.getAttribute("isCrossTable") :
 			if objectDef.getAttribute("isCrossTable").upper() == "TRUE" or objectDef.getAttribute("isCrossTable").upper() == "YES":
 				self.isCrossTable = True
@@ -111,7 +113,7 @@ class CIObject:
 		self.addFieldObject(Field(dbName, obName, isKey ))
 		
 	def sysout(self):
-		print "%s (%s):" % (self.obName, self.dbTableName)
+		print ("%s (%s):" % (self.obName, self.dbTableName))
 		for field in self.keyFields:
 			field.sysout()
 		for field in self.nonKeyFields:

@@ -54,11 +54,11 @@ RETURN = allAttributeCode
 		$config['per_page'] = 15;
 		$config['cur_tag_open'] = '<td class="currentPage">';
 		$config['cur_tag_close'] = '</td>';
-		$config['num_tag_open'] = '<td>';
+		$config['num_tag_open'] = '<td class="numPage">';
 		$config['num_tag_close'] = '</td>';
-		$config['prev_tag_open'] = '<td>';
+		$config['prev_tag_open'] = '<td class="page-left">';
 		$config['prev_tag_close'] = '</td>';
-		$config['next_tag_open'] = '<td>';
+		$config['next_tag_open'] = '<td class="page-right">';
 		$config['next_tag_close'] = '</td>';
 		$config['uri_segment'] = '5'; // where the page number is in the URI segment 
 		$this->pagination->initialize($config);

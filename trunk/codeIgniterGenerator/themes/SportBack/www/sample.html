@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+
+</head>
+<body>
+<div class="header">
+	<div class="title"></div>
+</div> <!-- end-header -->
+
+<div class="content">
+	<h1>Sample Form</h1>
+	<form action="">
+
+	<table border="0" cellpadding="0" cellspacing="0" class="form">
+		<tr>
+			<td class="form"><label>Product name :</label></td>
+			<td class="form"><input type="text" class="" /></td>
+		</tr>
+		<tr>
+			<td class="form"><label>Product Reference :<label></td>
+			<td class="form"><input type="text" class="" /></td>
+		</tr>
+		<tr>
+			<td class="form"><label>Selling Mode :<label></td>
+			<td class="form">
+				<input type="radio" name="val1" />abc
+				<input type="radio" name="val1" />def
+			</td>
+		</tr>
+		<tr>
+			<td class="form"><label>Selling Mode 2 :<label></td>
+			<td class="form">
+				<table class="switch">
+					<tr class="switchRight_on" id="values_12">
+						<td class="switchTagLeft" id="val1"><a href="#" onclick="selectSwitch('val1','values_12')">Val 1</a>
+						</td>
+						<td class="switchTagRight" id="val2"><a href="#" onclick="selectSwitch('val2','values_12')">Val 2</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="form"><label>Selling Mode 3 :<label></td>
+			<td class="form">
+				<table class="switch">
+					<tr class="switchLeft_on" id="values_AB">
+						<td class="switchTagLeft" id="valA"><a href="#" onclick="selectSwitch('valA', 'values_AB')">A</a>
+						</td>
+						<td class="switchTagRight" id="valB"><a href="#" onclick="selectSwitch('valB', 'values_AB')">B</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="form">
+				Selection :
+			</td>
+			<td class="form">
+				<select name="selectMe">
+					<option value="1">Value 1</option>
+					<option value="2">Value 2</option>
+					<option value="3">Value 3</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="form">
+				Choice :
+			</td>
+			<td class="form">
+				<input type="checkbox" name="Val" value="A"> Val A
+				<input type="checkbox" name="Val" value="B"> Val B
+			</td>
+		</tr>
+		<tr class="buttonBar">
+			<td colspan="2">
+				<button class="largePushButton">OK</button>
+			</td>
+		</tr>
+	</table>
+	 
+	</form>
+</div> <!-- end-content -->
+</body>
+</html>

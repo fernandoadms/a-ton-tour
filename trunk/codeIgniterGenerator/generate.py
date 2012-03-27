@@ -162,7 +162,7 @@ def generateTemplates(rootFiles, readerTemplates, kind):
 		#print (reader.generateSegmentObjectFor(reader.fileOut, structure))
 		filename = os.path.join(myDirectory, reader.generateSegmentObjectFor(reader.fileOut, structure) )
 		file = open(filename,'w')
-		file.write(content.encode("utf-8"))
+		file.write(content) #.encode("utf-8"))
 		file.close()
 		print ("    File <%s> succeffuly generated:" % filename)
 

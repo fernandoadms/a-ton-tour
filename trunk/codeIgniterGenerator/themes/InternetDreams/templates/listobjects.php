@@ -60,6 +60,13 @@ RETURN = allAttributeCode
 		$config['prev_tag_close'] = '</td>';
 		$config['next_tag_open'] = '<td class="page-right">';
 		$config['next_tag_close'] = '</td>';
+		$config['first_link'] = '&lt;&lt;';
+		$config['first_tag_open'] = '<td class="page-right">';
+		$config['first_tag_close'] = '</td>';		
+		$config['last_link'] = '&gt;&gt;';
+		$config['last_tag_open'] = '<td class="page-left">';
+		$config['last_tag_close'] = '</td>';	
+		$config['num_links'] = 5;
 		$config['uri_segment'] = '5'; // where the page number is in the URI segment 
 		$this->pagination->initialize($config);
 		$data['pagination'] = $this->pagination;

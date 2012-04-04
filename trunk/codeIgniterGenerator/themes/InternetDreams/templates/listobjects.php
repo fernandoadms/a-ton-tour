@@ -104,6 +104,42 @@ includesKey = True;
 RETURN = self.dbAndObVariablesList("$model->(dbVar)s = $this->input->post('(dbVar)s'); ", 'dbVar', 'obVar', 2, includesKey)
 %%
 		$model->save($this->db);
+%%codeForUploadFile = ""
+for field in self.fields:
+	attributeCode = ""
+	if field.sqlType.upper() == "FILE":
+		attributeCode += """
+		// Upload du fichier %(dbName)s : %(desc)s
+		$config['upload_path'] = realpath('www/uploads/');
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
+		$config['max_size']	= '0';
+		$config['max_width']  = '0';
+		$config['max_height']  = '0';
+		$this->load->library('upload', $config);
+		$path = $config['upload_path'] . "/";
+		$thumbnailsPath = $path . "thumbnails" . "/";
+		
+		$uploadDataImage = null;
+		if($this->upload->do_upload('%(dbName)s_file')){
+			$uploadDataImage = $this->upload->data('%(dbName)s_file');
+		} else {
+			// pas de fichier à charger
+		}
+		if($uploadDataImage != null) {
+			$model->%(dbName)s = '%(obName)s_%(dbName)s_' . $model->%(keyField)s . '_file' . $uploadDataImage['file_ext'];
+			rename($path . $uploadDataImage['file_name'], $path . $model->%(dbName)s);
+			// suppression de l'image téléchargée
+			unlink($path . $uploadDataImage['file_name']);
+			$model->save($this->db);
+		}""" % {'dbName' : field.dbName, 
+			'desc' : field.description, 
+			'obName' : self.obName
+			'keyField' : self.keyFields[0].dbName
+		}
+	codeForUploadFile += attributeCode
+
+RETURN = codeForUploadFile
+%%
 
 		$this->session->set_flashdata('msg_info', 'Nouveau %%(self.obName)%% ajoute');
 		

@@ -132,8 +132,8 @@ for field in self.fields:
           showTime: false
       });
 """
-		jsCode += """	cal.manageFields("btn_%(dbName)s", "%(dbName)s", "%"+"%d/%"+"%m/%"+"%Y");
-""" % { 'dbName' : field.dbName }
+		jsCode += """	cal.manageFields("btn_%(dbName)s", "%(dbName)s", "%(dateFormat)s");
+""" % { 'dbName' : field.dbName, 'dateFormat' : '%d/%m/%Y' }
 
 if hasDate:
 	jsCode += """

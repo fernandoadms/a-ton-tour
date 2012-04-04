@@ -44,7 +44,7 @@ for field in self.fields:
 	attributeCode = ""
 	if field.autoincrement:
 		## ne pas presenter les champs auto-increment
-		attributeCode = "<!-- AUTO_INCREMENT : DO NOT DISPLAY THIS ATTRIBUTE - " + attributeCode + " -->"
+		attributeCode = "<!-- AUTO_INCREMENT : DO NOT DISPLAY THIS ATTRIBUTE -->"
 		continue
 		
 	attributeCode += """<tr><td nowrap style="vertical-align: top; padding-top: 6px;"><label title="%(desc)s" for="%(dbName)s">""" % { 'dbName' : field.dbName, 'desc' : field.description }
@@ -78,7 +78,9 @@ for field in self.fields:
 		attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s" class="form-textarea"></textarea>""" % { 'dbName' : field.dbName }
 		
 	elif field.sqlType.upper() == "FILE":
-		attributeCode += """<input type="file" class="file_1" name="%(dbName)s" id="%(dbName)s">
+		attributeCode += """<input type="file" class="file_1" name="%(dbName)s_file" id="%(dbName)s_file">
+		</td>
+		<td>
 			<div class="bubble-left"></div>
 			<div class="bubble-inner">2Mo max / fichier</div>
 			<div class="bubble-right"></div>
@@ -118,7 +120,7 @@ for field in self.fields:
 		allAttributesCode += "\n\t" 
 	allAttributesCode += attributeCode
 
-RETURN =  allAttributesCode
+RETURN = allAttributesCode
 %%
 		<tr>
 			<td></td>
@@ -135,12 +137,12 @@ for field in self.fields:
 		if jsCode == "":
 			jsCode = """<script type="text/javascript">//<![CDATA[
       var cal = Calendar.setup({
-          onSelect: function(cal) { cal.hide() },
+          onSelect: function(cal) { cal.hide(); },
           showTime: false
       });
 """
-		jsCode += """	cal.manageFields("btn_%(dbName)s", "%(dbName)s", "%"+"%d/%"+"%m/%"+"%Y");
-""" % { 'dbName' : field.dbName }
+		jsCode += """	cal.manageFields("btn_%(dbName)s", "%(dbName)s", "%(dateFormat)s");
+""" % { 'dbName' : field.dbName, 'dateFormat' : '%d/%m/%Y' }
 
 if hasDate:
 	jsCode += """

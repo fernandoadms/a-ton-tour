@@ -63,10 +63,14 @@ RETURN = allAttributeCode
 	public function save(){
 		// Mise a jour des donnees en base
 		$model = new %%(self.obName)%%_model();
-		$model->%%(self.keyFields[0].dbName)%% = $this->input->post('%%(self.keyFields[0].dbName)%%');
+		$oldModel = %%(self.obName)%%_model::get%%(self.obName)%%($this->db, $%%(self.keyFields[0].dbName)%%);
 		%%
-includesKey = False;
-RETURN = self.dbAndObVariablesList("$model->(dbVar)s = $this->input->post('(dbVar)s'); ", 'dbVar', 'obVar', 2, includesKey)
+codeForAttributes = ""
+for field in self.fields:
+	codeForField = """
+		$model->%(dbName)s = $this->input->post('%(dbName)s');""" % {'dbName' : field.dbName }
+	codeForAttributes += codeForField
+RETURN = codeForAttributes
 %%
 		$model->update($this->db);
 		
@@ -77,7 +81,11 @@ for field in self.fields:
 	if field.sqlType.upper() == "FILE":
 		useUpload = True
 		attributeCode += """
-		// Upload du fichier %(dbName)s : %(desc)s
+		// Suppression de l'ancien fichier %(dbName)s : %(desc)s
+		if( $oldModel->%(dbName)s != "" && $model->%(dbName)s == ""){
+			unlink($path . $oldModel->%(dbName)s);
+		}
+		// Upload du nouveau fichier %(dbName)s : %(desc)s
 		$uploadDataFile_%(dbName)s = null;
 		if( $this->input->post('%(dbName)s_file') != "" && $this->upload->do_upload('%(dbName)s_file')){
 			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
@@ -90,7 +98,7 @@ for field in self.fields:
 		if($uploadDataFile_%(dbName)s != null) {
 			$model->%(dbName)s = '%(obName)s_%(dbName)s_' . $model->%(keyField)s . '_file' . $uploadDataFile_%(dbName)s['file_ext'];
 			rename($path . $uploadDataFile_%(dbName)s['file_name'], $path . $model->%(dbName)s);
-			// suppression de l'image téléchargée
+			// suppression du fichier temporaire téléchargée
 			unlink($path . $uploadDataFile_%(dbName)s['file_name']);
 			$model->update($this->db);
 		}""" % {'dbName' : field.dbName, 

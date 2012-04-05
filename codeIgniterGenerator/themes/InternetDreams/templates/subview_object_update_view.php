@@ -42,8 +42,8 @@ for field in self.fields:
 		if field.nullable:
 			attributeCode += """<option value=""></option>"""
 		attributeCode += """
-					<?php foreach ($%(referencedObject)sCollection as $%(referencedObject)s): ?>
-					<option value="<?= $%(referencedObject)s->%(keyReference)s ?>" <?= ($%(referencedObject)s->%(keyReference)s == $%(structureObName)s->%(dbName)s)?("selected"):("")?>><?= $%(referencedObject)s->%(display)s ?> </option>
+					<?php foreach ($%(referencedObject)sCollection as $%(referencedObject)sElt): ?>
+					<option value="<?= $%(referencedObject)sElt->%(keyReference)s ?>" <?= ($%(referencedObject)sElt->%(keyReference)s == $%(structureObName)s->%(dbName)s)?("selected"):("")?>><?= $%(referencedObject)sElt->%(display)s ?> </option>
 					<?php endforeach;?>
 				</select>
 		""" % { 'display' : field.display, 
@@ -52,18 +52,24 @@ for field in self.fields:
 				'structureObName' : self.obName.lower(),
 				'dbName' : field.dbName }
 				
-	elif field.sqlType.upper() == "DATE":
+	elif field.sqlType.upper()[0:4] == "DATE":
 		attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10" class="%(cssClass)s" value="%(valueCode)s"> <img src="<?=base_url()?>www/images/forms/icon_calendar.jpg" alt="" id="btn_%(dbName)s">""" % { 'dbName' : field.dbName, 'cssClass' : cssClass, 'valueCode' : valueCode}
 		
-	elif field.sqlType.upper() == "TEXT":
+	elif field.sqlType.upper()[0:4] == "TEXT":
 		attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s" class="form-textarea">%(valueCode)s</textarea>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode }
 		
-	elif field.sqlType.upper() == "FILE":
-		attributeCode += """<input type="file" class="file_1" name="%(dbName)s" id="%(dbName)s">
+	elif field.sqlType.upper()[0:4] == "FILE":
+		attributeCode += """<a href="<?=base_url()?>/www/uploads/%(valueCode)s" 
+			class="downloadFile">%(valueCode)s</a> <a href="#" title="Supprimer ce fichier">[X]</a><br><br>
+			<input type="file" class="file_1" name="%(dbName)s_file" id="%(dbName)s_file">
+		</td>
+		<td>
 			<div class="bubble-left"></div>
 			<div class="bubble-inner">JPEG, GIF 5MB max / image</div>
 			<div class="bubble-right"></div>
-		""" % { 'dbName' : field.dbName}
+		""" % { 'dbName' : field.dbName, 
+				'valueCode' : valueCode
+		}
 
 	elif field.sqlType.upper()[0:4] == "FLAG":
 		label = field.sqlType[5:-1].strip('"').strip("'")

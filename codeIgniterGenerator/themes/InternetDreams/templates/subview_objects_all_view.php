@@ -55,7 +55,7 @@ for field in self.fields:
 		attributeCode = """
 				<td valign="top">"""
 		if field.referencedObject:
-			attributeCode += """<?=$%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s?>
+			attributeCode += """<?=($%(structureObName)s->%(dbName)s == "")?(""):($%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s)?>
 			""" % { 'display' : field.display, 
 					'referencedObject' : field.referencedObject.obName.lower(),
 					'structureObName' : self.obName.lower(),
@@ -67,6 +67,11 @@ for field in self.fields:
 				'dbName' : field.dbName}
 		elif field.sqlType.upper()[0:4] == "ENUM":
 			attributeCode += """<?=$enum_%(dbName)s[$%(structureObName)s->%(dbName)s]?>""" % {
+				'structureObName' : self.obName.lower(),
+				'dbName' : field.dbName}
+		elif field.sqlType.upper()[0:4] == "FILE":
+			attributeCode += """<a href="<?=base_url()?>/www/uploads/<?=$%(structureObName)s->%(dbName)s?>" class="downloadFile">
+				<?=$%(structureObName)s->%(dbName)s?></a>""" % {
 				'structureObName' : self.obName.lower(),
 				'dbName' : field.dbName}
 		else:

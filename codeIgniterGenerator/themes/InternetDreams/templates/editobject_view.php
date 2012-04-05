@@ -49,7 +49,7 @@ $this->load->helper('views');
 <div class="nav-outer"> 
 
 	<?= htmlMyAccount() ?>
-	<?= htmlNavigation("itemA","edit"); ?>
+	<?= htmlNavigation("%%(self.obName.lower())%%","edit"); ?>
 
 </div>
 <div class="clear"></div>

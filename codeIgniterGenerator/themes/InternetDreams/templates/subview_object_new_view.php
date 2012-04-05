@@ -71,13 +71,13 @@ for field in self.fields:
 				'keyReference' : field.referencedObject.keyFields[0].dbName, 
 				'referencedObject' : field.referencedObject.obName.lower() }
 				
-	elif field.sqlType.upper() == "DATE":
+	elif field.sqlType.upper()[0:4] == "DATE":
 		attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10" class="%(cssClass)s"> <img src="<?=base_url()?>www/images/forms/icon_calendar.jpg" alt="" id="btn_%(dbName)s">""" % { 'dbName' : field.dbName, 'cssClass' : cssClass}
 		
-	elif field.sqlType.upper() == "TEXT":
+	elif field.sqlType.upper()[0:4] == "TEXT":
 		attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s" class="form-textarea"></textarea>""" % { 'dbName' : field.dbName }
 		
-	elif field.sqlType.upper() == "FILE":
+	elif field.sqlType.upper()[0:4] == "FILE":
 		attributeCode += """<input type="file" class="file_1" name="%(dbName)s_file" id="%(dbName)s_file">
 		</td>
 		<td>

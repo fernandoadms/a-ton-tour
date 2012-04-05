@@ -60,12 +60,14 @@ for field in self.fields:
 		
 	elif field.sqlType.upper()[0:4] == "FILE":
 		attributeCode += """<a href="<?=base_url()?>/www/uploads/%(valueCode)s" 
-			class="downloadFile">%(valueCode)s</a> <a href="#" title="Supprimer ce fichier">[X]</a><br><br>
+			class="downloadFile">%(valueCode)s</a> <a href="#" onclick='$("#%(dbName)s").val("")' title="Supprimer ce fichier">[X]</a>
+			<input type="hidden" name="%(dbName)s" id="%(dbName)s" value="<?= %(valueCode)s ?>">
+			<br><br>
 			<input type="file" class="file_1" name="%(dbName)s_file" id="%(dbName)s_file">
 		</td>
 		<td>
 			<div class="bubble-left"></div>
-			<div class="bubble-inner">JPEG, GIF 5MB max / image</div>
+			<div class="bubble-inner">2Mo max / fichier</div>
 			<div class="bubble-right"></div>
 		""" % { 'dbName' : field.dbName, 
 				'valueCode' : valueCode

@@ -224,3 +224,36 @@ div.checkboxButton_on a{
 	text-decoration: none;
 	text-shadow: 0px 0px 4px #00f;
 }
+
+table.data{
+	/*border: 1px solid black;*/
+	/* bdbec0 - d8d9dd - e7e8ec */
+	border-collapse: collapse;
+}
+tr.header{
+	
+}
+
+tr.header th{
+	background-image: url('../img/table-header.png');
+	background-repeat: no-repeat;
+	padding: 8px 10px 5px 10px;
+	height: 22px;
+	background-position: -14px 0px;
+	border-right: 1px solid #b4b5b7;
+}
+
+tr.header th:first-child{
+	background-position: 0px 0px;
+}
+
+tr.header th:last-child{
+	background-image: url('../img/table-header.png');
+	background-repeat: no-repeat;
+	background-position: 100% -56px;
+	border-right: none;
+}
+
+table.data tr td{
+	padding: 2px 5px 2px 10px;
+}

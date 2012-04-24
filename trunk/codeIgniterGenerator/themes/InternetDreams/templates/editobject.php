@@ -87,7 +87,7 @@ for field in self.fields:
 		}
 		// Upload du nouveau fichier %(dbName)s : %(desc)s
 		$uploadDataFile_%(dbName)s = null;
-		if( $this->input->post('%(dbName)s_file') != "" && $this->upload->do_upload('%(dbName)s_file')){
+		if( $this->upload->do_upload('%(dbName)s_file')){
 			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
 		} else {
 			// erreur

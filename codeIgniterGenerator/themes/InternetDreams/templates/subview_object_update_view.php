@@ -6,14 +6,14 @@
 <!--  start table-content  -->
 <div id="table-content">
 	<!-- start id-form -->
-	<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
 
 <?
 $attributes_info = array('name' => 'EditForm');
 $fields_info = array('%%(self.keyFields[0].dbName)%%' => $%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%);
 echo form_open_multipart('edit%%(self.obName.lower())%%/save', $attributes_info, $fields_info );
 ?>
-<!-- list of variables - auto-generated : -->
+	<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
+	<!-- list of variables - auto-generated : -->
 %%allAttributesCode = ""
 
 for field in self.fields:
@@ -59,10 +59,12 @@ for field in self.fields:
 		attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s" class="form-textarea">%(valueCode)s</textarea>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode }
 		
 	elif field.sqlType.upper()[0:4] == "FILE":
-		attributeCode += """<a href="<?=base_url()?>/www/uploads/%(valueCode)s" 
+		attributeCode += """<input type="hidden" name="%(dbName)s" id="%(dbName)s" value="%(valueCode)s">
+		<?php if($%(structureObName)s->%(dbName)s != "") { ?>
+		<a href="<?=base_url()?>/www/uploads/%(valueCode)s" 
 			class="downloadFile">%(valueCode)s</a> <a href="#" onclick='$("#%(dbName)s").val("")' title="Supprimer ce fichier">[X]</a>
-			<input type="hidden" name="%(dbName)s" id="%(dbName)s" value="<?= %(valueCode)s ?>">
 			<br><br>
+			<?php } ?>
 			<input type="file" class="file_1" name="%(dbName)s_file" id="%(dbName)s_file">
 		</td>
 		<td>
@@ -70,7 +72,8 @@ for field in self.fields:
 			<div class="bubble-inner">2Mo max / fichier</div>
 			<div class="bubble-right"></div>
 		""" % { 'dbName' : field.dbName, 
-				'valueCode' : valueCode
+				'valueCode' : valueCode,
+				'structureObName': self.obName.lower()
 		}
 
 	elif field.sqlType.upper()[0:4] == "FLAG":

@@ -12,7 +12,16 @@
 </div> <!-- end-header -->
 
 <div class="content">
-	<h1>Sample Form</h1>
+	<h1>Sample Form H1</h1>
+	<h2>Sample Form H2</h2>
+	<h3>Sample Form H3</h3>
+	<h4>Sample Form H4</h4>
+	
+	<div style="width: 400px;">
+		<div class="message_info">This an info box</div>
+		<div class="message_warn">This a warning box</div>
+		<div class="message_error">This an error box</div>
+	</div>
 	<form action="">
 
 	<table border="0" cellpadding="0" cellspacing="0" class="form">
@@ -95,21 +104,22 @@
 		</tr>
 		<tr class="buttonBar">
 			<td colspan="2">
-				<button class="largePushButton">OK</button>
+				<button class="classic">&#10003; Save</button>
+				<button class="classic">&#171; Back</button>
 			</td>
 		</tr>
 	</table>
 	 
 	</form>
-	
-	<table class="data">
+	<div style="width: 1100px;">
+	<table class="data" style="width: 100%;">
 		<tr class="header">
-			<th>Entete 1</th>
-			<th>Entete 2</th>
-			<th>Entete 3</th>
-			<th>Entete 4</th>
+			<th><a class="sortUp" href="#tri">Entete 1</a></th>
+			<th><a class="sortDown" href="#tri">Entete 2</a></th>
+			<th><a class="sortable" href="#tri">Entete 3</a></th>
+			<th><a class="sortable" href="#tri">Entete 4</a></th>
 		</tr>
-		<tr>
+		<tr class="even">
 			<td>Data 1</td>
 			<td>Data 2</td>
 			<td>Data 3</td>
@@ -121,13 +131,19 @@
 			<td>Data 3</td>
 			<td>Data 4</td>
 		</tr>
-		<tr>
+		<tr class="even">
 			<td>Data 1</td>
 			<td>Data 2</td>
 			<td>Data 3</td>
 			<td>Data 4</td>
 		</tr>
 		<tr>
+			<td>Data 1</td>
+			<td>Data 2</td>
+			<td>Data 3</td>
+			<td>Data 4</td>
+		</tr>
+		<tr class="even">
 			<td>Data 1</td>
 			<td>Data 2</td>
 			<td>Data 3</td>
@@ -140,11 +156,16 @@
 			<td>Data 4</td>
 		</tr>
 	</table>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
+	
+	<!-- Pagination -->
+	<table class="pagination">
+		<tr>
+			<td class="currentPage">1</td><td class="numPage"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/10">2</a></td><td class="numPage"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/20">3</a></td><td class="numPage"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/30">4</a></td><td class="page-right"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/10">&gt;</a></td>		</tr>
+	</table>
+	<!-- /Pagination -->
+	</div>
+
+	
 	<br>
 	<br>
 	<br>

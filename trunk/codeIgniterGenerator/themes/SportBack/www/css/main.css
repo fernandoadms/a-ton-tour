@@ -5,9 +5,10 @@
     padding: 0;
 }
 
-/**
- * Page
+/* ***************************************************
+ * PAGE
  */
+
 
 body{
 	background-color: #dcdfe6;
@@ -31,7 +32,33 @@ div.header{
 h1{
 	padding-top: 10px;
 	font-weight: bold;
+	font-size: 32px;
+	font-family: arial;
+	font-style: italic;
+}
+
+h2{
+	padding-top: 10px;
+	font-weight: bold;
+	font-size: 28px;
+	font-family: arial;
+	font-style: italic;
+}
+
+h3{
+	padding-top: 10px;
+	font-weight: bold;
 	font-size: 24px;
+	font-family: arial;
+	font-style: italic;
+}
+
+h4{
+	padding-top: 10px;
+	font-weight: bold;
+	font-size: 18px;
+	font-family: arial;
+	font-style: italic;
 }
 
 .content{
@@ -68,8 +95,8 @@ tr.buttonBar td{
 	text-align: right;
 }
 
-/**
- * Forms
+/* ***************************************************
+ * FORMULAIRES
  */
 
 button.largePushButton{
@@ -83,7 +110,6 @@ button.largePushButton{
 	font-weight: bold;
 	font-size: 20px;
 	text-shadow: 0px -2px -1px #888;
-	
 }
 
 button.largePushButton:HOVER{
@@ -95,6 +121,29 @@ button.largePushButton:ACTIVE{
 	color: #ffe;
 	text-shadow: 0px -2px -1px #ff8;
 }
+
+button.classic{
+	border: none;
+	width: 123px;
+	height: 42px;
+	background-color: transparent;
+	background-image: url('../img/simpleButton.png');
+	color: #eee;
+	font-family: Verdana, Helvetica, Arial;
+	font-size: 14px;
+	margin: 8px 0 8px 0;
+}
+
+button.classic:HOVER{
+	text-shadow: 0px 0px 8px #888;	
+	color: #fff;
+}
+
+button.classic:ACTIVE{
+	background-position: 0px 43px;
+	height: 42px;
+}
+
 table.switch{
 	border-collapse: collapse;
 	border-spacing: 0px;
@@ -225,6 +274,63 @@ div.checkboxButton_on a{
 	text-shadow: 0px 0px 4px #00f;
 }
 
+/* ***************************************************
+ * MESSAGES
+ */
+
+div.message_info{
+	border: 1px solid #85b0b9;
+	color: #4d668b;
+	background-color: #d7f1f6;
+	margin: 0 auto;
+	text-decoration: none;
+	text-shadow: none;
+	padding: 10px 10px 10px 10px;
+	font-family: Arial, sans;
+	font-size: 14px;
+	background-image: url('../img/messageBox-info.png');
+	background-repeat: no-repeat;
+	background-position: right;
+	margin: 10px 0 10px 0;
+}
+
+div.message_warn{
+	border: 1px solid #c79f1f;
+	color: #977918;
+	background-color: #e9eaa8;
+	margin: 0 auto;
+	text-decoration: none;
+	text-shadow: none;
+	padding: 10px 10px 10px 10px;
+	font-family: Arial, sans;
+	font-size: 14px;
+	background-image: url('../img/messageBox-warn.png');
+	background-repeat: no-repeat;
+	background-position: right;
+	margin: 10px 0 10px 0;
+}
+
+div.message_error{
+	border: 1px solid #c71f1f;
+	color: #931717;
+	background-color: #eaa8a8;
+	margin: 0 auto;
+	text-decoration: none;
+	text-shadow: none;
+	padding: 10px 10px 10px 10px;
+	font-family: Arial, sans;
+	font-size: 14px;
+	background-image: url('../img/messageBox-error.png');
+	background-repeat: no-repeat;
+	background-position: right;
+	margin: 10px 0 10px 0;
+}
+
+
+/* ***************************************************
+ * TABLEAU
+ */
+
 table.data{
 	/*border: 1px solid black;*/
 	/* bdbec0 - d8d9dd - e7e8ec */
@@ -241,11 +347,13 @@ tr.header th{
 	height: 22px;
 	background-position: -14px 0px;
 	border-right: 1px solid #b4b5b7;
+	font-family: sans-serif;
 }
 
 tr.header th:first-child{
 	background-position: 0px 0px;
 }
+
 
 tr.header th:last-child{
 	background-image: url('../img/table-header.png');
@@ -256,4 +364,115 @@ tr.header th:last-child{
 
 table.data tr td{
 	padding: 2px 5px 2px 10px;
+	font-family: sans-serif;
+	background-color: #fff;
+	border-right: 1px solid #b4b5b7;
+}
+
+table.data tr td:first-child{
+	background-image: url('../img/table-content-left.png');
+	background-repeat: repeat-y;
+}
+
+table.data tr td:last-child{
+	background-image: url('../img/table-content-right.png');
+	background-repeat: repeat-y;
+	background-position: right;
+	border: none;
+}
+
+table.data tr.even td{
+	background-color: #ebe4e0;
+}
+
+table.data tr:last-child{
+	border-bottom: 1px solid #b4b5b7;
+}
+
+
+/* ***************************************************
+ * TRI dans les tableaux
+ */
+
+tr.header th a.sortable {
+	background: url(../img/table_sort_arrow.gif) right no-repeat;
+	color: #4A4A4A;
+    text-decoration: none;
+    text-shadow: none;
+    font-weight: bold;
+	margin: 0 0 0 10px;
+	padding: 0 10px 0 0;
+}
+
+tr.header th a.sortable:hover {
+	color: #00f;
+	text-shadow: 0 0 4px #00f;
+}
+
+
+tr.header th a.sortUp, tr.header th a.sortDown {
+	background: url(../img/table_sort_arrow_asc.gif) right no-repeat;
+	color: #DA4C00;
+    text-decoration: none;
+    font-weight: bold;
+	margin: 0 0 0 10px;
+	padding: 0 10px 0 0;
+}
+
+tr.header th a.sortUp:hover, tr.header th a.sortDown:hover {
+    text-shadow: 0 0 4px #DA4C00;
+}
+
+tr.header th a.sortDown{
+	background: url(../img/table_sort_arrow_desc.gif) right no-repeat;
+}
+
+
+/* ***************************************************
+ * PAGINATION
+ */
+
+.pagination {
+	float: right;
+	margin: 0 4px 0 0;
+	border-collapse: separate;
+	text-shadow: none;
+	text-decoration: none;
+}
+
+.page-left, .currentPage, .page-right, .numPage
+{
+	height: 22px;
+	width: 22px;
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #9c9c9c;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.page-left a, .page-right a, .numPage a {
+	color: #4A4A4A;
+	font-size: 14px;
+	text-shadow: none;
+	text-decoration: none;
+}
+
+td.page-left a:HOVER, td.page-right a:HOVER, td.numPage a:HOVER {
+	color: #000;
+}
+
+.currentPage {
+	font-size: 14px;
+	background-color: #faf7f6;
+	border-color: #000;
+	color: #DA4C00;
+    text-decoration: none;
+    text-shadow: 0 0 4px #DA4C00;	
+}
+
+
+#page-info	{
+	float: left;
+	line-height: 16px;
+	padding: 3px 12px 0 12px;
 }

@@ -13,6 +13,8 @@ for field in self.fields:
 
 	if field.sqlType.upper()[0:4] == "FLAG":
 		typeForSQL = "char(1)"
+	if field.sqlType.upper()[0:4] == "DATE":
+		typeForSQL = "date"
 	elif field.sqlType.upper()[0:4] == "ENUM":
 		typeForSQL = "ENUM(" 
 		enumTypes = field.sqlType[5:-1]
@@ -32,8 +34,6 @@ for field in self.fields:
 		attributeCode += "NOT NULL "
 	if field.autoincrement:
 		attributeCode += "AUTO_INCREMENT "
-	if field.isKey:
-		attributeCode += "PRIMARY KEY "
 	attributeCode += "COMMENT '%(desc)s'" % { 'desc' : field.description.replace("'","\\'") }
 	allAttributesCode += attributeCode
 
@@ -41,6 +41,20 @@ content += allAttributesCode
 RETURN = content
 %%
 );
+
+%%primaryKeys = "ALTER TABLE %(tableName)s ADD PRIMARY KEY (" % { 'tableName': self.dbTableName }
+columns = "";
+for field in self.keyFields:
+	if columns != "":
+		columns += ", "
+	columns += field.dbName
+if columns != "":
+	primaryKeys += columns + ");";
+else:
+	primaryKeys = "# no keys";
+RETURN = primaryKeys
+%%
+
 
 %%foreignKeys = ""
 for field in self.fields:

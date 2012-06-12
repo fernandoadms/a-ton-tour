@@ -86,11 +86,12 @@ RETURN = phpCode
  * Mise a jour d'un enregistrement
  */
 if (!function_exists('update%%(self.obName)%%')) {
-	function update%%(self.obName)%%($db, %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%, %%
+	function update%%(self.obName)%%($db, %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%% %%
 includesKey = False
+prefix = ", "
 if self.isCrossTable:
-	includesKey = True
-RETURN = self.dbVariablesList("$(var)s", 'var',  '', '', 0, includesKey)
+	prefix = ""
+RETURN = prefix + self.dbVariablesList("$(var)s", 'var',  '', '', 0, includesKey)
 %%) {
 		$data = array(%%
 includesKey = False

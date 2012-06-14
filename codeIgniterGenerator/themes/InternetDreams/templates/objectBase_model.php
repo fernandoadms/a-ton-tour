@@ -46,7 +46,7 @@ RETURN = self.dbVariablesList("""/**
 allAttributesCode = ""
 for field in self.fields:
 	attributeCode = ""
-	if field.sqlType.upper() == "DATE":
+	if field.sqlType.upper()[0:4] == "DATE":
 		attributeCode = "$model->%(dbName)s = fromSQLDate($row['%(dbName)s']);" % { 'dbName' : field.dbName }
 	else:
 		attributeCode = "$model->%(dbName)s = $row['%(dbName)s'];" % { 'dbName' : field.dbName }
@@ -143,7 +143,7 @@ RETURN = allKeys%%);
 for field in self.fields:
 	attributeCode = ""
 	if not field.autoincrement :
-		if field.sqlType.upper() == "DATE":
+		if field.sqlType.upper()[0:4] == "DATE":
 			attributeCode = "toSQLDate($this->%(dbName)s)" % { 'dbName' : field.dbName }
 		else:
 			attributeCode = "$this->%(dbName)s" % { 'dbName' : field.dbName }
@@ -165,7 +165,7 @@ else:
 		update%%(self.obName)%%($db, %%allAttributesCode = ""
 for field in self.fields:
 	attributeCode = ""
-	if field.sqlType.upper() == "DATE":
+	if field.sqlType.upper()[0:4] == "DATE":
 		attributeCode = "toSQLDate($this->%(dbName)s)" % { 'dbName' : field.dbName }
 	else:
 		attributeCode = "$this->%(dbName)s" % { 'dbName' : field.dbName }

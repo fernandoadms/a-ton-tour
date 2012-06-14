@@ -132,7 +132,7 @@ RETURN = allAttributesCode
 	%%jsCode = ""
 hasDate = False
 for field in self.fields:
-	if field.sqlType.upper() == "DATE":
+	if field.sqlType.upper()[0:4] == "DATE":
 		hasDate = True
 		if jsCode == "":
 			jsCode = """<script type="text/javascript">//<![CDATA[

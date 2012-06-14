@@ -63,7 +63,7 @@ RETURN = allAttributeCode
 	public function save(){
 		// Mise a jour des donnees en base
 		$model = new %%(self.obName)%%_model();
-		$oldModel = %%(self.obName)%%_model::get%%(self.obName)%%($this->db, $%%(self.keyFields[0].dbName)%%);
+		$oldModel = %%(self.obName)%%_model::get%%(self.obName)%%($this->db, $this->input->post('%%(self.keyFields[0].dbName)%%') );
 		%%
 codeForAttributes = ""
 for field in self.fields:

@@ -11,6 +11,10 @@ $this->load->helper('form');
 $this->load->helper('url');
 $this->load->helper('template');
 $this->load->helper('views');
+
+if($this->session->userdata('user_name') == "") {
+	redirect('welcome/index');
+}
 ?>
 
 <html>
@@ -27,7 +31,7 @@ $this->load->helper('views');
 
 	<!-- start logo -->
 	<div id="logo">
-	<a href=""><img src="<?=base_url()?>www/images/shared/logo.png" width="156" height="40" alt="" /></a>
+	<a href=""><img src="<?=base_url()?>www/images/shared/logo.png" alt="" /></a>
 	</div>
 	<!-- end logo -->
 	
@@ -48,8 +52,8 @@ $this->load->helper('views');
 <!--  start nav-outer -->
 <div class="nav-outer"> 
 
-	<?= htmlMyAccount() ?>
-	<?= htmlNavigation("%%(self.obName.lower())%%","edit"); ?>
+	<?= htmlMyAccount($this->session) ?>
+	<?= htmlNavigation("%%(self.obName.lower())%%","edit", $this->session); ?>
 
 </div>
 <div class="clear"></div>

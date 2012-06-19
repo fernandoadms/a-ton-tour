@@ -55,13 +55,16 @@ for field in self.fields:
 	elif field.sqlType.upper()[0:4] == "DATE":
 		attributeCode += """<input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10" class="%(cssClass)s" value="%(valueCode)s"> <img src="<?=base_url()?>www/images/forms/icon_calendar.jpg" alt="" id="btn_%(dbName)s">""" % { 'dbName' : field.dbName, 'cssClass' : cssClass, 'valueCode' : valueCode}
 		
+	elif field.sqlType.upper()[0:8] == "PASSWORD":
+		attributeCode += """<input type="password" name="%(dbName)s" id="%(dbName)s" class="%(cssClass)s" value="%(valueCode)s">""" % { 'dbName' : field.dbName, 'cssClass' : cssClass, 'valueCode' : valueCode}
+		
 	elif field.sqlType.upper()[0:4] == "TEXT":
 		attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s" class="form-textarea">%(valueCode)s</textarea>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode }
 		
 	elif field.sqlType.upper()[0:4] == "FILE":
 		attributeCode += """<input type="hidden" name="%(dbName)s" id="%(dbName)s" value="%(valueCode)s">
 		<?php if($%(structureObName)s->%(dbName)s != "") { ?>
-		<a href="<?=base_url()?>/www/uploads/%(valueCode)s" 
+		<a href="<?=base_url()?>www/uploads/%(valueCode)s" 
 			class="downloadFile">%(valueCode)s</a> <a href="#" onclick='$("#%(dbName)s").val("")' title="Supprimer ce fichier">[X]</a>
 			<br><br>
 			<?php } ?>

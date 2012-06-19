@@ -41,6 +41,9 @@ RETURN = self.dbVariablesList("""/**
 	 * Cree une nouvelle instance a partir d'un enregistrement de base de donnees
 	 */
 	static function %%(self.obName)%%_modelFromRow($row){
+		if($row == null){
+			return null;
+		}
 		$model = new %%(self.obName)%%_model();
 		%%
 allAttributesCode = ""

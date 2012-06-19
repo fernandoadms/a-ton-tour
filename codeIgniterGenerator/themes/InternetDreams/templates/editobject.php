@@ -86,20 +86,30 @@ for field in self.fields:
 			unlink($path . $oldModel->%(dbName)s);
 		}
 		// Upload du nouveau fichier %(dbName)s : %(desc)s
-		$uploadDataFile_%(dbName)s = null;
-		if( $this->upload->do_upload('%(dbName)s_file')){
+		$codeErrors = null;
+		if ( ! $this->upload->do_upload('%(dbName)s_file')) {
 			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
-		} else {
-			// erreur
-			if( $this->input->post('%(dbName)s_file') != "" ){
-				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
+			$codeErrors = $this->upload->display_errors() . $uploadDataFile_%(dbName)s['file_ext'];
+			if($this->upload->display_errors() == $this->lang->line('upload_no_file_selected')){
+    	        $codeErrors = "NO_FILE";
+        	}
+	    }else{
+			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
+	    }
+	    
+		if($codeErrors != null && $codeErrors != "NO_FILE") {
+	    	$this->session->set_flashdata('msg_error', $codeErrors);
+		} else
+		{
+			$model->%(dbName)s = "";
+			if($uploadDataFile_%(dbName)s['file_name'] != null && $uploadDataFile_%(dbName)s['file_name'] != "") {
+				$model->%(dbName)s = '%(obName)s_%(dbName)s_' . $model->%(keyField)s . '_file' . $uploadDataFile_%(dbName)s['file_ext'];
+				rename($path . $uploadDataFile_%(dbName)s['file_name'], $path . $model->%(dbName)s);
+				// suppression du fichier temporaire telecharge
+				if( file_exists( $path . $uploadDataFile_%(dbName)s['file_name'] ) ){
+					unlink($path . $uploadDataFile_%(dbName)s['file_name']);
+				}
 			}
-		}
-		if($uploadDataFile_%(dbName)s != null) {
-			$model->%(dbName)s = '%(obName)s_%(dbName)s_' . $model->%(keyField)s . '_file' . $uploadDataFile_%(dbName)s['file_ext'];
-			rename($path . $uploadDataFile_%(dbName)s['file_name'], $path . $model->%(dbName)s);
-			// suppression du fichier temporaire téléchargée
-			unlink($path . $uploadDataFile_%(dbName)s['file_name']);
 			$model->update($this->db);
 		}""" % {'dbName' : field.dbName, 
 			'desc' : field.description, 
@@ -111,9 +121,11 @@ for field in self.fields:
 if useUpload:
 	codeForUploadFile = """
 		// Configuration pour chargement des fichiers 
+		// Chemin de stockage des fichiers : doit être WRITABLE pour tous
 		$config['upload_path'] = realpath('www/uploads/');
-		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-		$config['max_size']	= '0';
+		// Voir la configuration des types mimes s'il y a un probleme avec l'extension
+		$config['allowed_types'] = 'doc|docx|xls|xlsx|pdf|gif|jpg|png|jpeg|zip|rar|ppt|pptx';
+		$config['max_size']	= '2000';
 		$config['max_width']  = '0';
 		$config['max_height']  = '0';
 		$this->load->library('upload', $config);

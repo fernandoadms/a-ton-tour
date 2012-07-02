@@ -55,7 +55,8 @@ for field in self.fields:
 		attributeCode = """
 				<td valign="top">"""
 		if field.referencedObject:
-			attributeCode += """<?=($%(structureObName)s->%(dbName)s == "")?(""):($%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s)?>
+			# si pas de lien, le champ vaut 0 (et la sequence commence à 1)
+			attributeCode += """<?=($%(structureObName)s->%(dbName)s == 0)?(""):($%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s)?>
 			""" % { 'display' : field.display, 
 					'referencedObject' : field.referencedObject.obName.lower(),
 					'structureObName' : self.obName.lower(),
@@ -72,6 +73,12 @@ for field in self.fields:
 		elif field.sqlType.upper()[0:4] == "FILE":
 			attributeCode += """<a href="<?=base_url()?>/www/uploads/<?=$%(structureObName)s->%(dbName)s?>" class="downloadFile">
 				<?=$%(structureObName)s->%(dbName)s?></a>""" % {
+				'structureObName' : self.obName.lower(),
+				'dbName' : field.dbName}
+		elif field.sqlType.upper()[0:8] == "PASSWORD":
+			attributeCode += """<input type="hidden" name="%(dbName)s" id="%(dbName)s" value="<?=$%(structureObName)s->%(dbName)s?>">
+			<span title="<?=$%(structureObName)s->%(dbName)s?>">&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+			""" % {
 				'structureObName' : self.obName.lower(),
 				'dbName' : field.dbName}
 		else:

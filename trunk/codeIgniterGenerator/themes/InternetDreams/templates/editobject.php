@@ -89,7 +89,7 @@ for field in self.fields:
 		$codeErrors = null;
 		if ( ! $this->upload->do_upload('%(dbName)s_file')) {
 			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
-			$codeErrors = $this->upload->display_errors() . $uploadDataFile_%(dbName)s['file_ext'];
+			$codeErrors = $this->upload->display_errors() . "ext: [" . $uploadDataFile_%(dbName)s['file_ext'] ."] type mime: [" . $uploadDataFile_%(dbName)s['file_type'] . "]";
 			if($this->upload->display_errors() == $this->lang->line('upload_no_file_selected')){
     	        $codeErrors = "NO_FILE";
         	}
@@ -121,7 +121,7 @@ for field in self.fields:
 if useUpload:
 	codeForUploadFile = """
 		// Configuration pour chargement des fichiers 
-		// Chemin de stockage des fichiers : doit être WRITABLE pour tous
+		// Chemin de stockage des fichiers : doit etre WRITABLE pour tous
 		$config['upload_path'] = realpath('www/uploads/');
 		// Voir la configuration des types mimes s'il y a un probleme avec l'extension
 		$config['allowed_types'] = 'doc|docx|xls|xlsx|pdf|gif|jpg|png|jpeg|zip|rar|ppt|pptx';

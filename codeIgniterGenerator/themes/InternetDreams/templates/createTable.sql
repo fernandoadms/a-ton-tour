@@ -13,8 +13,12 @@ for field in self.fields:
 
 	if field.sqlType.upper()[0:4] == "FLAG":
 		typeForSQL = "char(1)"
+	if field.sqlType.upper()[0:5] == "COLOR":
+		typeForSQL = "char(7)"
 	if field.sqlType.upper()[0:4] == "DATE":
 		typeForSQL = "date"
+	elif field.sqlType.upper()[0:8] == "PASSWORD":
+		typeForSQL = "varchar" + field.sqlType[9:]
 	elif field.sqlType.upper()[0:4] == "ENUM":
 		typeForSQL = "ENUM(" 
 		enumTypes = field.sqlType[5:-1]
@@ -38,21 +42,16 @@ for field in self.fields:
 	allAttributesCode += attributeCode
 
 content += allAttributesCode
-RETURN = content
-%%
-);
 
-%%primaryKeys = "ALTER TABLE %(tableName)s ADD PRIMARY KEY (" % { 'tableName': self.dbTableName }
-columns = "";
+primaryKeys = ""
 for field in self.keyFields:
-	if columns != "":
-		columns += ", "
-	columns += field.dbName
-if columns != "":
-	primaryKeys += columns + ");";
-else:
-	primaryKeys = "# no keys";
-RETURN = primaryKeys
+	primaryKeys += """ ,
+	PRIMARY KEY (%s) """ % field.dbName
+
+content += primaryKeys + """
+);"""
+
+RETURN = content
 %%
 
 

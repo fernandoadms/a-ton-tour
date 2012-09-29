@@ -18,7 +18,7 @@ for field in self.fields:
 	if field.sqlType.upper()[0:4] == "DATE":
 		typeForSQL = "date"
 	elif field.sqlType.upper()[0:8] == "PASSWORD":
-		typeForSQL = "varchar" + field.sqlType[9:]
+		typeForSQL = "varchar" + field.sqlType[8:]
 	elif field.sqlType.upper()[0:4] == "ENUM":
 		typeForSQL = "ENUM(" 
 		enumTypes = field.sqlType[5:-1]

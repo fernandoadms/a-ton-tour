@@ -91,7 +91,7 @@ RETURN = allAttributesCode
 			$records[%%allKeys = ""
 for aKey in self.keyFields:
 	if allKeys != "":
-		allKeys += ","
+		allKeys += " . '@' . "
 	allKeys += "$row['%s']" % aKey.dbName
 RETURN = allKeys
 %%] = %%(self.obName)%%_model::%%(self.obName)%%_modelFromRow($row);
@@ -201,6 +201,35 @@ RETURN = allAttributesCode%%);
 else:
 	RETURN = ""%%
 
+%%getterAllFK = ""
+for field in self.fields:
+	getterFK = ""
+	if field.referencedObject:
+		getterFK = """
+	/**
+	 * Recupere la liste des enregistrements depuis la cle etrangere %(obName)s->%(fieldName)s ==> %(referencedObjectName)s->%(foreignKey)s
+	 * @param object $db database object
+	 * @return array of data
+	 */
+	static function getAll%(obName)ssFor%(referencedObjectName)s($db, $%(foreignKey)s, $orderBy = null, $asc = null){
+		$rows = getAll%(obName)ssFor%(referencedObjectName)sFromDB($db, $%(foreignKey)s, $orderBy, $asc);
+		$records = array();
+		foreach ($rows as $row) {
+			$records[$row['%(keyField)s']] = %(obName)s_model::%(obName)s_modelFromRow($row);
+		}
+		return $records;
+	}
+""" % { 'keyField' : self.keyFields[0].dbName,
+		'obName' : self.obName,
+		'referencedObjectName' : field.referencedObject.obName,
+		'foreignKey' : field.referencedObject.keyFields[0].dbName,
+		'fieldName' : field.dbName
+	}
+	getterAllFK += getterFK
+RETURN = getterAllFK
+%%
+	
+	
 	
 	/***************************************************************************
 	 * DO NOT MODIFY THIS FILE, IT IS GENERATED

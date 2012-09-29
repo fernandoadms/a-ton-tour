@@ -138,6 +138,49 @@ if (!function_exists('get%%(self.obName)%%Row')) {
 	}
 }
 
+
+%%getterAllFK = ""
+for field in self.fields:
+	getterFK = ""
+	if field.referencedObject:
+		getterFK = """
+/**
+ * Recupere la liste des enregistrements depuis la cle etrangere %(obName)s->%(fieldName)s ==> %(referencedObjectName)s->%(foreignKey)s
+ * @param object $db database object
+ * @return array of data
+ */
+if (!function_exists('getAll%(obName)ssFor%(referencedObjectName)sFromDB')) {
+	function getAll%(obName)ssFor%(referencedObjectName)sFromDB($db, $%(foreignKey)s, $orderBy = null, $asc = null, $limit = null, $offset = null) {
+		if( $orderBy != null ){
+			if($asc != null) {
+				$db->order_by($orderBy, $asc);
+			}else {
+				$db->order_by($orderBy, "asc");
+			}
+		}
+		if( $limit == null ) {
+			$query = $db->get_where("%(tableName)s", array('%(fieldName)s' => $%(foreignKey)s));
+		} else {
+			$query = $db->limit($limit, $offset)->get_where("%(tableName)s", array('%(fieldName)s' => $%(foreignKey)s));
+		}
+		// recuperer les enregistrements
+		$records = array();
+		foreach ($query->result_array() as $row) {
+			$records[] = $row;
+		}
+		return $records;
+	}
+}
+""" % { 'tableName' : self.dbTableName,
+		'obName' : self.obName,
+		'referencedObjectName' : field.referencedObject.obName,
+		'foreignKey' : field.referencedObject.keyFields[0].dbName,
+		'fieldName' : field.dbName
+	}
+	getterAllFK += getterFK
+RETURN = getterAllFK
+%%
+
 	/***************************************************************************
 	 * USER DEFINED FUNCTIONS
 	 ***************************************************************************/

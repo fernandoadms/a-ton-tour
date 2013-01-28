@@ -150,7 +150,7 @@ for field in self.fields:
  * @return array of data
  */
 if (!function_exists('getAll%(obName)ssFor%(referencedObjectName)sFromDB')) {
-	function getAll%(obName)ssFor%(referencedObjectName)sFromDB($db, $%(foreignKey)s, $orderBy = null, $asc = null, $limit = null, $offset = null) {
+	function getAll%(obName)ssFor%(referencedObjectName)sFromDBBy_%(fieldName)s($db, $%(foreignKey)s, $orderBy = null, $asc = null, $limit = null, $offset = null) {
 		if( $orderBy != null ){
 			if($asc != null) {
 				$db->order_by($orderBy, $asc);

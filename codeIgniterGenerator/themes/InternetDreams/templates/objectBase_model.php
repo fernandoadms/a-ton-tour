@@ -211,8 +211,8 @@ for field in self.fields:
 	 * @param object $db database object
 	 * @return array of data
 	 */
-	static function getAll%(obName)ssFor%(referencedObjectName)s($db, $%(foreignKey)s, $orderBy = null, $asc = null){
-		$rows = getAll%(obName)ssFor%(referencedObjectName)sFromDB($db, $%(foreignKey)s, $orderBy, $asc);
+	static function getAll%(obName)ssFor%(referencedObjectName)sBy_%(fieldName)s($db, $%(foreignKey)s, $orderBy = null, $asc = null){
+		$rows = getAll%(obName)ssFor%(referencedObjectName)sFromDBBy_%(fieldName)s($db, $%(foreignKey)s, $orderBy, $asc);
 		$records = array();
 		foreach ($rows as $row) {
 			$records[$row['%(keyField)s']] = %(obName)s_model::%(obName)s_modelFromRow($row);

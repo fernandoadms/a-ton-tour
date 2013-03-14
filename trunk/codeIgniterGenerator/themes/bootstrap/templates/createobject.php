@@ -34,10 +34,11 @@ RETURN = allAttributeCode
 	}
 	
 	/**
-	 * Recuperation des objets references
+	 * page de creation d'un %%(self.obName.lower())%%
 	 */	
 	public function index(){
-%%allAttributeCode = ""
+		$data = Array();
+%%allAttributeCode = "		// Recuperation des objets references"
 # inclure les objets référencés dans l'objet $data
 
 for field in self.fields:
@@ -61,6 +62,7 @@ for field in self.fields:
 	
 RETURN = allAttributeCode
 %%
+
 		$this->load->view('create%%(self.obName.lower())%%_view', $data);
 	}
 	
@@ -71,7 +73,7 @@ RETURN = allAttributeCode
 	
 		// Insertion en base
 		$model = new %%(self.obName)%%_model();
-%%
+		%%
 includesKey = True;
 RETURN = self.dbAndObVariablesList("$model->(dbVar)s = $this->input->post('(dbVar)s'); ", 'dbVar', 'obVar', 2, includesKey)
 %%

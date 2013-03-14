@@ -159,13 +159,13 @@ for field in self.fields:
 	if field.sqlType.upper()[0:4] == "DATE":
 		hasDate = True
 		if jsCode == "":
-			jsCode = """<script type="text/javascript">//<![CDATA["""
+			jsCode = """<script type="text/javascript">
+"""
 		jsCode += """$('#datepicker_%(dbName)s').datepicker();
 """ % { 'dbName' : field.dbName }
 
 if hasDate:
-	jsCode += """
-    //]]></script>"""
+	jsCode += """</script>"""
 RETURN = jsCode
 %%
 

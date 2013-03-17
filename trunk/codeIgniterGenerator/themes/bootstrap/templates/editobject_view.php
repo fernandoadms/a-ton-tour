@@ -83,10 +83,11 @@ for field in self.fields:
 				'dbName' : field.dbName}
 				
 	elif field.sqlType.upper()[0:4] == "DATE":
-		attributeCode += """<div data-date-format="dd/mm/yyyy" id="datepicker_%(dbName)s"
+		dateFormat = field.sqlType[5:-1]
+		attributeCode += """<div data-date-format="%(dateFormat)s" id="datepicker_%(dbName)s"
 			class="input-append date"><input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10" value="%(valueCode)s"> 
 			<span class="add-on"><i class="icon-calendar"></i></span>
-		</div>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode}
+		</div>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode, 'dateFormat' : dateFormat}
 		
 	elif field.sqlType.upper()[0:8] == "PASSWORD":
 		attributeCode += """<div class="input-prepend">

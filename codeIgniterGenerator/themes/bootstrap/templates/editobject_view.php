@@ -86,8 +86,7 @@ for field in self.fields:
 		attributeCode += """<div data-date-format="dd/mm/yyyy" id="datepicker_%(dbName)s"
 			class="input-append date"><input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10" value="%(valueCode)s"> 
 			<span class="add-on"><i class="icon-calendar"></i></span>
-		</div>
-		<p class="help-block valtype">%(desc)s</p>""" % { 'dbName' : field.dbName, 'desc' : field.description, 'valueCode' : valueCode}
+		</div>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode}
 		
 	elif field.sqlType.upper()[0:8] == "PASSWORD":
 		attributeCode += """<div class="input-prepend">

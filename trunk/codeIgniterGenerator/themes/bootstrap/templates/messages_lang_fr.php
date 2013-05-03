@@ -10,6 +10,7 @@ $lang['%%(self.obName.lower())%%.form.create.title'] = "Ajouter un %%(self.displ
 $lang['%%(self.obName.lower())%%.form.edit.title'] = "Editer un %%(self.displayName)%%";
 $lang['%%(self.obName.lower())%%.form.list.title'] = "Liste des %%(self.displayName)%%s";
 
+$lang['%%(self.obName.lower())%%.menu.item'] = "%%(self.displayName)%%";
 
 
 %%allAttributesCode = ""

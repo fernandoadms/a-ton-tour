@@ -30,7 +30,7 @@ Syntaxe:
 
 """
 
-import sys, os, glob, string, ConfigParser, re
+import sys, os, glob, string, ConfigParser, re, codecs
 from code import InteractiveInterpreter
 
 from objects import CIObject
@@ -43,7 +43,7 @@ class TemplateFileReader:
 		self.segments = []
 
 	def readFile(self, templateFilename):
-		f = open(templateFilename, 'r')
+		f = codecs.open(templateFilename, 'r', sys.getfilesystemencoding())
 		print ("templateFilename : %s" % templateFilename)
 
 		# detection des infos meta sur les premieres lignes
@@ -104,9 +104,11 @@ class TemplateFileReader:
 		return self.generateSegmentObjectFor(self.segments, structure)
 
 	def generateSegmentObjectFor(self, segmentArray, structure):
-		content = ""
+		content = u""
 		for segment in segmentArray:
+			## encoding to UTF-8
 			content += segment.toString(structure)
+			
 		return content
 
 
@@ -182,7 +184,7 @@ if __name__ == '__main__':
 	# découpage de generateObjects en liste d'items à générer
 	kindsToGenerate = []
 	if generateObjects.find("all") > -1:
-		kindsToGenerate = "helpers,controllers,views,subViews,baseModels,models,sql".split(",")
+		kindsToGenerate = "helpers,controllers,views,subViews,baseModels,models,sql,lang".split(",")
 	else:
 		for item in generateObjects.split(","):
 			kindsToGenerate.append(item.strip())

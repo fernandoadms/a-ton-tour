@@ -18,7 +18,7 @@ if($this->session->userdata('user_name') == "") {
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<? echo htmlHeader('Editer un %%(self.displayName)%%'); ?>
+<? echo htmlHeader( $this->lang->line('%%(self.obName.lower())%%.form.edit.title') ); ?>
 
 </head>
 <body>
@@ -27,7 +27,7 @@ if($this->session->userdata('user_name') == "") {
 	
 	<div class="container">
 	
-		<h2>Editer un %%(self.displayName)%%</h2>
+		<h2><?= $this->lang->line('%%(self.obName.lower())%%.form.edit.title') ?></h2>
 			<?php
 				$msg = $this->session->flashdata('msg_info');    if($msg != ""){echo formatInfo($msg);} 
 				$msg = $this->session->flashdata('msg_confirm'); if($msg != ""){echo formatConfirm($msg);}
@@ -61,8 +61,8 @@ for field in self.fields:
 	if not field.nullable:
 		attributeCode += "* "
 
-	attributeCode += """%(obName)s :</label>
-	<div class="controls">""" % { 'obName' : field.obName }
+	attributeCode += """<?= $this->lang->line('%(objectObName)s.form.%(dbName)s.description') ?> :</label>
+	<div class="controls">""" % { 'dbName' : field.dbName, 'objectObName' : self.obName.lower() }
 
 	cssClass = "inp-form"
 
@@ -140,9 +140,9 @@ for field in self.fields:
 			attributeCode += ">"
 			
 	attributeCode += """
-		<p class="help-block valtype">%(desc)s</p>
-	</div>""" % {'desc' : field.description}
-
+		<p class="help-block valtype"><?= $this->lang->line('%(objectObName)s.form.%(dbName)s.description')?></p>
+	</div>""" % {'dbName' : field.dbName, 'objectObName' : self.obName.lower() }
+	
 
 	# ajouter le nouvel attribut, avec indentation si ce n'est pas le premier
 	if allAttributesCode != "":
@@ -153,8 +153,8 @@ RETURN =  allAttributesCode
 %%
 			
 			    <div class="form-actions">
-				    <button type="submit" class="btn btn-primary">Enregistrer</button>
-				    <a href="<?=base_url()?>index.php/list%%(self.obName.lower())%%s/index" type="button" class="btn">Annuler</a>
+				    <button type="submit" class="btn btn-primary"><?= $this->lang->line('form.button.save') ?></button>
+				    <a href="<?=base_url()?>index.php/list%%(self.obName.lower())%%s/index" type="button" class="btn"><?= $this->lang->line('form.button.cancel') ?></a>
 			    </div>
 			
 			

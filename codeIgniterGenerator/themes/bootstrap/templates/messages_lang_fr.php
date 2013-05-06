@@ -1,14 +1,26 @@
 %[kind : lang]
-%[file : messages_%%(self.obName.lower())%%s_lang.php] 
+%[file : messages_%%(self.obName.lower())%%_lang.php] 
 %[path : language/french]
 <?php
-$lang['%%(self.obName.lower())%%.message.confirm.deleted'] = "%%(self.obName.lower())%% supprimé";
-$lang['%%(self.obName.lower())%%.message.confirm.added'] = "%%(self.obName.lower())%% créé avec succès";
-$lang['%%(self.obName.lower())%%.message.confirm.modified'] = "%%(self.obName.lower())%% mis à jour avec succès";
+/**
+ * Message file for entity %%(self.obName)%%
+ * 
+ * Please don't forget to load this file:
+ *  Solution A : Use "/application/config/autoload.php"
+ *               Add this line:
+ *               $autoload['language'] = array(..., 'messages_%%(self.obName.lower())%%', ...);
+ *
+ *  Solution B : Load this message file anywhere you want.
+ *  
+ */
 
-$lang['%%(self.obName.lower())%%.form.create.title'] = "Ajouter un %%(self.displayName)%%";
-$lang['%%(self.obName.lower())%%.form.edit.title'] = "Editer un %%(self.displayName)%%";
-$lang['%%(self.obName.lower())%%.form.list.title'] = "Liste des %%(self.displayName)%%s";
+$lang['%%(self.obName.lower())%%.message.confirm.deleted'] = "%%(self.displayName)%% supprimé";
+$lang['%%(self.obName.lower())%%.message.confirm.added'] = "%%(self.displayName)%% créé avec succès";
+$lang['%%(self.obName.lower())%%.message.confirm.modified'] = "%%(self.displayName)%% mis à jour avec succès";
+
+$lang['%%(self.obName.lower())%%.form.create.title'] = "Ajouter un %%(self.displayName.lower())%%";
+$lang['%%(self.obName.lower())%%.form.edit.title'] = "Editer un %%(self.displayName.lower())%%";
+$lang['%%(self.obName.lower())%%.form.list.title'] = "Liste des %%(self.displayName.lower())%%s";
 
 $lang['%%(self.obName.lower())%%.menu.item'] = "%%(self.displayName)%%";
 

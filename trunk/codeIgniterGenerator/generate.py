@@ -31,7 +31,8 @@ Syntaxe:
 """
 
 import sys, os, glob, string, ConfigParser, re, codecs
-from code import InteractiveInterpreter
+from code import InteractiveInterpreter, InteractiveConsole
+import traceback, inspect
 
 from objects import CIObject
 
@@ -125,10 +126,37 @@ class PythonSegment:
 	
 	def toString(self, structure):
 		filename='<input>'
-		symbol='exec'
+		symbol='single'
 		localVars = {"self" : structure, "RETURN" : ""}
 		inter = InteractiveInterpreter(localVars)
-		inter.runsource(self.data, filename, symbol)
+		
+		#if isinstance(source, types.UnicodeType):
+		#    import IOBinding
+		#    try:
+		#        source = source.encode(IOBinding.encoding)
+		#    except UnicodeError:
+		console = InteractiveConsole(localVars, filename)
+
+		try:
+			code_object = compile(self.data, '<string>', 'exec')
+			exec code_object in localVars
+		except Exception as e :
+			print ("-  ERR -----------------------------------------")
+			InteractiveInterpreter.showsyntaxerror(console, filename)
+			frames = inspect.trace()
+			lineNumber = frames[1][2]
+			print "At line %s" % lineNumber
+			print ("- /ERR -----------------------------------------")
+
+			print ("-  CODE -----------------------------------------")
+			lines = self.data.split('\n')
+			for i in range(0,lineNumber):
+				print lines[i]
+			print "^"*20
+			
+			print ("- /CODE -----------------------------------------")
+			print ("")
+					
 		return localVars["RETURN"]
 
 class PythonLine:
@@ -139,7 +167,7 @@ class PythonLine:
 		result = ""
 		try:
 			result = eval(self.data, {"self" : structure} )
-		except Exception:
+		except Exception as e:
 			print ("ERROR while executing this code:")
 			print ("------------------------------------------------")
 			print (self.data)

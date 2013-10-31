@@ -194,7 +194,7 @@ def generateTemplates(rootFiles, readerTemplates, kind):
 		file = open(filename,'w')
 		file.write( content.encode("utf-8") )
 		file.close()
-		print ("    File <%s> succeffuly generated:" % filename)
+		print ("    File <%s> successfully generated:" % filename)
 
 if __name__ == '__main__':	
 

@@ -70,6 +70,9 @@ class CIObject:
 		descriptionDef = objectDef.getElementsByTagName("description")[0]
 		self.description = descriptionDef.firstChild.data
 
+		# stockage des objets référencés pour ne pas avoir à les charger en boucle
+		allSubStructure = {}
+		allSubStructure[self.obName] = self
 		for attributeTag in objectDef.getElementsByTagName("attribute"):
 			aField = Field()
 			aField.dbName = attributeTag.getAttribute("id")
@@ -83,10 +86,14 @@ class CIObject:
 			if attributeTag.getAttribute("autoincrement") != "":
 				aField.autoincrement = (attributeTag.getAttribute("autoincrement") == "YES")
 			if attributeTag.getAttribute("referencedObject") != "":
-				subStructure = CIObject()
-				filePath = os.path.dirname(aFilename)
-				subStructure.fromXML(os.path.join(filePath, attributeTag.getAttribute("referencedObject") + ".xml"))
-				aField.referencedObject = subStructure
+				#print("... Finding %s" % attributeTag.getAttribute("referencedObject"))
+				if attributeTag.getAttribute("referencedObject") not in allSubStructure:
+					subStructure = CIObject()
+					filePath = os.path.dirname(aFilename)
+					subStructure.fromXML(os.path.join(filePath, attributeTag.getAttribute("referencedObject") + ".xml"))
+					allSubStructure[attributeTag.getAttribute("referencedObject")] = subStructure
+				aField.referencedObject = allSubStructure[attributeTag.getAttribute("referencedObject")]
+				#print("...... key: %s" % aField.referencedObject.keyFields[0].dbName)
 
 			if attributeTag.getAttribute("display") != "":
 				aField.display = attributeTag.getAttribute("display")

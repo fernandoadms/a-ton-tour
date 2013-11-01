@@ -109,8 +109,7 @@ RETURN = allAttributeCode
 	function delete($%%(self.keyFields[0].dbName)%%){
 		%%(self.obName)%%_model::delete($this->db, $%%(self.keyFields[0].dbName)%%);
 
-		$this->session->set_flashdata('msg_confirm', '%%(self.obName)%% supprime');
-
+		$this->session->set_flashdata('msg_confirm', $this->lang->line('%%(self.obName.lower())%%.message.confirm.deleted') );
 		redirect('list%%(self.obName.lower())%%s/index'); 
 	}
 

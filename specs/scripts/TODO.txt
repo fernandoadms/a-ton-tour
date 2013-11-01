@@ -1,8 +1,0 @@
-
-
-A FAIRE:
- type : date --> faire un calendrier en auto et gérer les dates jusqu'à la Bdd
-        mettre les options posibles ==> Select en HTML avec les libellés et les choix possibles
-        text : type textarea
-
-

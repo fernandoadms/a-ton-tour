@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+
+</head>
+<body>
+<div class="header">
+	<div class="title"></div>
+</div> <!-- end-header -->
+
+<div class="content">
+	<h1>Sample Form H1</h1>
+	<h2>Sample Form H2</h2>
+	<h3>Sample Form H3</h3>
+	<h4>Sample Form H4</h4>
+	
+	<div style="width: 400px;">
+		<div class="message_info">This an info box</div>
+		<div class="message_warn">This a warning box</div>
+		<div class="message_error">This an error box</div>
+	</div>
+	<form action="">
+
+	<table border="0" cellpadding="0" cellspacing="0" class="form">
+		<tr>
+			<td class="form"><label>Product name :</label></td>
+			<td class="form"><input type="text" class="" /></td>
+		</tr>
+		<tr>
+			<td class="form"><label>Product Reference :<label></td>
+			<td class="form"><input type="text" class="" /></td>
+		</tr>
+		<tr>
+			<td class="form"><label>Selling Mode :<label></td>
+			<td class="form">
+				<input type="radio" name="val1" />abc
+				<input type="radio" name="val1" />def
+			</td>
+		</tr>
+		<tr>
+			<td class="form"><label>Selling Mode 1 :<label></td>
+			<td class="form">
+				<span class="radioCheck"><a href="#">abc</a></span>
+				<span class="radioCheck_on"><a href="#">def</a></span>
+			</td>
+		</tr>
+		<tr>
+			<td class="form"><label>Selling Mode 2 :<label></td>
+			<td class="form">
+				<table class="switch">
+					<tr class="switchRight_on" id="values_12">
+						<td class="switchTagLeft" id="val1"><a href="#" onclick="selectSwitch('val1','values_12')">Val 1</a>
+						</td>
+						<td class="switchTagRight" id="val2"><a href="#" onclick="selectSwitch('val2','values_12')">Val 2</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="form"><label>Selling Mode 3 :<label></td>
+			<td class="form">
+				<table class="switch">
+					<tr class="switchLeft_on" id="values_AB">
+						<td class="switchTagLeft" id="valA"><a href="#" onclick="selectSwitch('valA', 'values_AB')">A</a>
+						</td>
+						<td class="switchTagRight" id="valB"><a href="#" onclick="selectSwitch('valB', 'values_AB')">B</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="form">
+				Selection :
+			</td>
+			<td class="form">
+				<select name="selectMe">
+					<option value="1">Value 1</option>
+					<option value="2">Value 2</option>
+					<option value="3">Value 3</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="form">
+				Choice :
+			</td>
+			<td class="form">
+				<input type="checkbox" name="Val" value="A"> Yes
+			</td>
+		</tr>
+		<tr>
+			<td class="form">
+				Choice 2 :
+			</td>
+			<td class="form">
+				<div class="checkboxButton_off"><a href="#">Done</a></div>
+				<div class="checkboxButton_on"><a href="#">Done</a></div>
+			</td>
+		</tr>
+		<tr class="buttonBar">
+			<td colspan="2">
+				<button class="classic">&#10003; Save</button>
+				<button class="classic">&#171; Back</button>
+			</td>
+		</tr>
+	</table>
+	 
+	</form>
+	<div style="width: 1100px;">
+	<table class="data" style="width: 100%;">
+		<tr class="header">
+			<th><a class="sortUp" href="#tri">Entete 1</a></th>
+			<th><a class="sortDown" href="#tri">Entete 2</a></th>
+			<th><a class="sortable" href="#tri">Entete 3</a></th>
+			<th><a class="sortable" href="#tri">Entete 4</a></th>
+		</tr>
+		<tr class="even">
+			<td>Data 1</td>
+			<td>Data 2</td>
+			<td>Data 3</td>
+			<td>Data 4</td>
+		</tr>
+		<tr>
+			<td>Data 1</td>
+			<td>Data 2</td>
+			<td>Data 3</td>
+			<td>Data 4</td>
+		</tr>
+		<tr class="even">
+			<td>Data 1</td>
+			<td>Data 2</td>
+			<td>Data 3</td>
+			<td>Data 4</td>
+		</tr>
+		<tr>
+			<td>Data 1</td>
+			<td>Data 2</td>
+			<td>Data 3</td>
+			<td>Data 4</td>
+		</tr>
+		<tr class="even">
+			<td>Data 1</td>
+			<td>Data 2</td>
+			<td>Data 3</td>
+			<td>Data 4</td>
+		</tr>
+		<tr>
+			<td>Data 1</td>
+			<td>Data 2</td>
+			<td>Data 3</td>
+			<td>Data 4</td>
+		</tr>
+	</table>
+	
+	<!-- Pagination -->
+	<table class="pagination">
+		<tr>
+			<td class="currentPage">1</td><td class="numPage"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/10">2</a></td><td class="numPage"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/20">3</a></td><td class="numPage"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/30">4</a></td><td class="page-right"><a href="http://localhost/specsv2/index.php/listchamps/index/chpidchp/asc/10">&gt;</a></td>		</tr>
+	</table>
+	<!-- /Pagination -->
+	</div>
+
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+</div> <!-- end-content -->
+</body>
+</html>

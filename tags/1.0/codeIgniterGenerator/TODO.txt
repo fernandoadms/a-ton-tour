@@ -1,0 +1,7 @@
+
+
+A FAIRE:
+ type : mettre les options posibles ==> Select en HTML avec les libellés et les choix possibles
+        text : type textarea
+
+

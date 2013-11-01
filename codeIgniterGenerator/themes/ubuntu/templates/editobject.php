@@ -90,7 +90,8 @@ for field in self.fields:
 		if ( ! $this->upload->do_upload('%(dbName)s_file')) {
 			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
 			$codeErrors = $this->upload->display_errors() . "ext: [" . $uploadDataFile_%(dbName)s['file_ext'] ."] type mime: [" . $uploadDataFile_%(dbName)s['file_type'] . "]";
-			if($this->upload->display_errors() == $this->lang->line('upload_no_file_selected')){
+			if($this->upload->display_errors() == $this->lang->line('upload_no_file_selected')
+				|| $this->upload->display_errors() == '<p>upload_no_file_selected</p>'){ // if not translated
     	        $codeErrors = "NO_FILE";
         	}
 	    }else{
@@ -134,8 +135,8 @@ if useUpload:
 		
 RETURN = codeForUploadFile
 %%
-		$this->session->set_flashdata('msg_confirm', '%%(self.obName)%% mis a jour');
 
+		$this->session->set_flashdata('msg_confirm', $this->lang->line('%%(self.obName.lower())%%.message.confirm.modified') );
 		redirect('list%%(self.obName.lower())%%s/index');
 	}
 

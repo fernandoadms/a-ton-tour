@@ -14,7 +14,9 @@
  *  
  */
 
-$lang['%%(self.obName.lower())%%.message.confirm.deleted'] = "%%(self.displayName)%% supprimé";
+$lang['%%(self.obName.lower())%%.message.askConfirm.deletion'] = "Désirez-vous supprimer ce %%(self.displayName)%% ?";
+
+$lang['%%(self.obName.lower())%%.message.confirm.deleted'] = "%%(self.displayName)%% supprimé avec succès";
 $lang['%%(self.obName.lower())%%.message.confirm.added'] = "%%(self.displayName)%% créé avec succès";
 $lang['%%(self.obName.lower())%%.message.confirm.modified'] = "%%(self.displayName)%% mis à jour avec succès";
 

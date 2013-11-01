@@ -1,0 +1,79 @@
+/** MAIN.CSS **/
+/* use for custom CSS */
+.brand-logo{
+	background: url(../images/logo-small.png) no-repeat top left;
+	width: 150px;
+	height: 40px;
+	margin-right: 10px;
+	float: left;
+}
+
+html {
+    height: 100%;
+}
+
+body#login-bg {
+    height: 100%;
+    margin: 0;
+    padding-top: 60px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+	background: #2a0d19; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMmEwZDE5IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMjMlIiBzdG9wLWNvbG9yPSIjYjA1NDcwIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iNDElIiBzdG9wLWNvbG9yPSIjZTBjZmJlIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q2NmI1NSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+	background: -moz-linear-gradient(-45deg,  #2a0d19 0%, #b05470 23%, #e0cfbe 41%, #d66b55 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#2a0d19), color-stop(23%,#b05470), color-stop(41%,#e0cfbe), color-stop(100%,#d66b55)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(-45deg,  #2a0d19 0%,#b05470 23%,#e0cfbe 41%,#d66b55 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(-45deg,  #2a0d19 0%,#b05470 23%,#e0cfbe 41%,#d66b55 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(-45deg,  #2a0d19 0%,#b05470 23%,#e0cfbe 41%,#d66b55 100%); /* IE10+ */
+	background: linear-gradient(135deg,  #2a0d19 0%,#b05470 23%,#e0cfbe 41%,#d66b55 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2a0d19', endColorstr='#d66b55',GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
+
+}
+
+
+.login-holder{
+	background-color: #fff;
+}
+
+.login-box{
+	margin-left: auto; 
+	margin-right: auto;
+	width: 400px;
+	border: 1px solid #999;
+	-moz-box-shadow: 0px 0px 12px 0px #555555;
+	-webkit-box-shadow: 0px 0px 12px 0px #555555;
+	-o-box-shadow: 0px 0px 12px 0px #555555;
+	box-shadow: 0px 0px 12px 0px #555555;
+	filter:progid:DXImageTransform.Microsoft.Shadow(color=#555555, Direction=NaN, Strength=12);
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;	
+}
+
+.login-holder{
+	padding: 20px 50px 20px 50px;
+}
+
+.brand-login{
+	padding-left: 10px;
+	height: 42px;
+	background-color: #1B1B1B;
+    background-image: linear-gradient(to bottom, #222222, #111111);
+    background-repeat: repeat-x;
+    border-color: #252525;    
+	-moz-border-radius: 5px 5px 0px 0px;
+	-webkit-border-radius: 5px 5px 0px 0px;
+	border-radius: 5px 5px 0px 0px;	
+	font-size: 20px;
+    font-weight: 200;
+    color: #999999;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.brand-login .brand-logo{
+	line-height: 44px;
+	padding-left: 45px;
+}
+

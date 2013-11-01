@@ -212,7 +212,7 @@ if __name__ == '__main__':
 	# découpage de generateObjects en liste d'items à générer
 	kindsToGenerate = []
 	if generateObjects.find("all") > -1:
-		kindsToGenerate = "helpers,controllers,views,subViews,baseModels,models,sql,lang".split(",")
+		kindsToGenerate = "helpers,controllers,views,subViews,baseModels,models,sql,lang,unitTest".split(",")
 	else:
 		for item in generateObjects.split(","):
 			kindsToGenerate.append(item.strip())

@@ -70,11 +70,13 @@ if self.isCrossTable:
 	phpCode = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKey)
 else:
 	includesAutoIncrement = False
-	for field in self.keyFields:
-		if field.autoincrement and not includesAutoIncrement:
-			includesAutoIncrement = True
-	phpCode = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, not includesAutoIncrement)
-RETURN = phpCode
+	for field in self.nonKeyFields:
+		if field.referencedObject:
+			phpCode += "'%(var)s'=>($%(var)s == '')?(null):($%(var)s)," % {'var': field.dbName}
+		else:
+			phpCode += "'%(var)s'=>$%(var)s," % {'var': field.dbName}
+			
+RETURN = phpCode[:-1]
 %%);
 		$db->insert('%%(self.dbTableName)%%',$data);
 		return $db->insert_id();
@@ -94,10 +96,14 @@ if self.isCrossTable:
 RETURN = prefix + self.dbVariablesList("$(var)s", 'var',  '', '', 0, includesKey)
 %%) {
 		$data = array(%%
-includesKey = False
-if self.isCrossTable:
-	includesKey = True
-RETURN = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKey)
+phpCode = ""
+for field in self.nonKeyFields:
+	if field.referencedObject:
+		phpCode += "'%(var)s'=>($%(var)s == '')?(null):($%(var)s)," % {'var': field.dbName}
+	else:
+		phpCode += "'%(var)s'=>$%(var)s," % {'var': field.dbName}
+
+RETURN = phpCode[:-1]
 %%);
 		$db->where('%%(self.keyFields[0].dbName)%%', %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%);
 		$db->update('%%(self.dbTableName)%%', $data);

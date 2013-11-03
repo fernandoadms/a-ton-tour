@@ -93,18 +93,18 @@ for field in self.fields:
 	elif field.sqlType.upper()[0:4] == "DATE":
 		dateFormat = field.sqlType[5:-1]
 		attributeCode += """<div data-date-format="%(dateFormat)s" id="datepicker_%(dbName)s"
-			class="input-append date form-control"><input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10" value="%(valueCode)s"> 
-			<span class="add-on"><i class="icon-calendar"></i></span>
+			class="input-append date input-group"><input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10" value="%(valueCode)s" class="form-control"> 
+			<span class="input-group-addon add-on"><i class="icon-calendar"></i></span>
 		</div>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode, 'dateFormat' : dateFormat}
 		
 	elif field.sqlType.upper()[0:8] == "PASSWORD":
-		attributeCode += """<div class="input-prepend">
-								<span class="add-on"><i class="icon-key"></i></span> <input
+		attributeCode += """<div class="input-group">
+								<span class="input-group-addon add-on"><i class="icon-key"></i></span> <input
 									type="password" placeholder="Password" name="%(dbName)s" id="%(dbName)s" value="%(valueCode)s" class="form-control">
 							</div>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode}
 		
 	elif field.sqlType.upper()[0:4] == "TEXT":
-		attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s">%(valueCode)s</textarea>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode}
+		attributeCode += """<textarea name="%(dbName)s" id="%(dbName)s" class="form-control">%(valueCode)s</textarea>""" % { 'dbName' : field.dbName, 'valueCode' : valueCode}
 		
 	elif field.sqlType.upper()[0:4] == "FILE":
 		attributeCode += """<input class="form-control input-file" id="%(dbName)s_file" name="%(dbName)s_file" type="file">
@@ -120,9 +120,9 @@ for field in self.fields:
 
 	elif field.sqlType.upper()[0:4] == "FLAG":
 		label = field.sqlType[5:-1].strip('"').strip("'")
-		attributeCode += """<label class="checkbox"> <input name="%(dbName)s" id="%(dbName)s" value="O" type="checkbox" class="form-control"
+		attributeCode += """<div class="checkbox"><label> <input name="%(dbName)s" id="%(dbName)s" value="O" type="checkbox"
 		<?= ($%(structureObName)s->%(dbName)s == "O")?("checked"):("")?>> %(label)s
-							</label>""" % { 'dbName' : field.dbName, 
+							</label></div>""" % { 'dbName' : field.dbName, 
 				'label': label.strip(), 
 				'structureObName' : self.obName.lower(), }
 		

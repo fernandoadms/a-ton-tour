@@ -144,7 +144,7 @@ endforeach; ?>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="pagination">
-				<ul>
+				<ul class="pagination pagination-sm">
 				<?php echo $pagination->create_links();?>
 				</ul>
 				</div>

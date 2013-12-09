@@ -163,8 +163,8 @@ RETURN =  allAttributesCode
 
 			<div class="form-group">
 				<div class="col-lg-8 col-lg-offset-4">
-					<button class="btn btn-default" onclick="document.location.href='<?=base_url()?>index.php/list%%(self.obName.lower())%%s/index'; return false;"><?= $this->lang->line('form.button.cancel') ?></button>
-					<button class="btn btn-primary" type="submit"><?= $this->lang->line('form.button.save') ?></button>
+					<a class="btn btn-default" href="<?=base_url()?>index.php/list%%(self.obName.lower())%%s/index"><?= $this->lang->line('form.button.cancel') ?></a>
+					<input type="submit" class="btn btn-primary" value="<?= $this->lang->line('form.button.save') ?>" />
 				</div>
 			</div>
 			

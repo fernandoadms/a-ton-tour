@@ -51,21 +51,21 @@ RETURN = allAttributeCode
 		// preparer la pagination
 		$config['base_url'] = base_url().'index.php/list%%(self.obName.lower())%%s/index/'.$orderBy.'/'.$asc.'/';
 		$config['total_rows'] = %%(self.obName)%%_model::getCount%%(self.obName)%%s($this->db);
-		$config['per_page'] = 15;
-		$config['cur_tag_open'] = '<li class="active">';
-		$config['cur_tag_close'] = '</li>';
+		$config['per_page'] = 10;
+		$config['cur_tag_open'] = '<li class="active"><a href="#">';
+		$config['cur_tag_close'] = '</a></li>';
 		$config['num_tag_open'] = '<li>';
 		$config['num_tag_close'] = '</li>';
-		$config['prev_tag_open'] = '<li class="prev>';
+		$config['prev_tag_open'] = '<li class="prev">';
 		$config['prev_tag_close'] = '</li>';
 		$config['next_tag_open'] = '<li class="next">';
 		$config['next_tag_close'] = '</li>';
-		$config['first_link'] = '&lt;&lt;';
+		$config['first_link'] = '«';
 		$config['first_tag_open'] = '<li>';
-		$config['first_tag_close'] = '</li>';		
-		$config['last_link'] = '&gt;&gt;';
+		$config['first_tag_close'] = '</li>';
+		$config['last_link'] = '»';
 		$config['last_tag_open'] = '<li>';
-		$config['last_tag_close'] = '</li>';	
+		$config['last_tag_close'] = '</li>';
 		$config['num_links'] = 5;
 		$config['uri_segment'] = '5'; // where the page number is in the URI segment 
 		$this->pagination->initialize($config);

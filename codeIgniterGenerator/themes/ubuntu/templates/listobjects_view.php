@@ -30,7 +30,12 @@ if($this->session->userdata('user_name') == "") {
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="page-header">
-					<h1 id="navbar"><?= $this->lang->line('%%(self.obName.lower())%%.form.list.title') ?></h1>
+					<div class="title-header">
+						<h1 id="navbar"><?= $this->lang->line('%%(self.obName.lower())%%.form.list.title') ?></h1>
+					</div>
+					<div class="button-header">
+						<a href="<?=base_url()?>index.php/create%%(self.obName.lower())%%/index" class="btn btn-primary"><?= $this->lang->line('%%(self.obName.lower())%%.form.create.title') ?></a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -49,13 +54,13 @@ if($this->session->userdata('user_name') == "") {
 				<tr>
 		<!-- table header auto-generated : -->
 			%%
-RETURN = self.dbAndObVariablesList("""<th class=\"sortable\">
+RETURN = self.dbAndObVariablesList("""<th class="sortable
+						<?php if($orderBy == '(dbVar)s'&& $asc == 'asc') {
+						?> sortAsc<?php 
+						}else if($orderBy == '(dbVar)s'&& $asc == 'desc') {
+						?> sortDesc<?php 
+						}?>">
 						<a href="<?=base_url()?>index.php/list%(obName)ss/index/(dbVar)s/<?= ($orderBy == '(dbVar)s'&& $asc == 'asc')?('desc'):('asc') ?>"
-						<?php if($orderBy == '(dbVar)s'&& $asc == 'asc') {?>
-							class=" sortAsc"
-						<?php }else if($orderBy == '(dbVar)s'&& $asc == 'desc') {?>
-							class=" sortDesc"
-						<?php }?>
 						><?= $this->lang->line('%(obName)s.form.(dbVar)s.label') ?></a></th>""" % {'obName':self.obName.lower()}, 'dbVar', 'obVar', 3, False)
 %%
 					<th><?= $this->lang->line('object.tableheader.actions') ?></th>

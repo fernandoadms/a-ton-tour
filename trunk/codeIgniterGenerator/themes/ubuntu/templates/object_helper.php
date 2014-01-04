@@ -155,7 +155,7 @@ for field in self.fields:
  * @param object $db database object
  * @return array of data
  */
-if (!function_exists('getAll%(obName)ssFor%(referencedObjectName)sFromDB')) {
+if (!function_exists('getAll%(obName)ssFor%(referencedObjectName)sFromDBBy_%(fieldName)s')) {
 	function getAll%(obName)ssFor%(referencedObjectName)sFromDBBy_%(fieldName)s($db, $%(foreignKey)s, $orderBy = null, $asc = null, $limit = null, $offset = null) {
 		if( $orderBy != null ){
 			if($asc != null) {

@@ -15,7 +15,6 @@ class List%%(self.obName)%%s extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('%%(self.obName)%%_model');
-		$this->load->library('session');
 		$this->load->library('pagination');
 		$this->load->helper('url');
 		$this->load->database();
@@ -31,6 +30,7 @@ for field in self.fields:
 	
 RETURN = allAttributeCode
 %%
+		$this->load->library('session');
 
 	}
 

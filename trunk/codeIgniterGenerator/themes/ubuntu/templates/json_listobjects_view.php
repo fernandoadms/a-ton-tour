@@ -1,4 +1,4 @@
-%[kind : views]
+%[kind : json]
 %[file : list%%(self.obName.lower())%%s_view.php] 
 %[path : views/json]
 <?php

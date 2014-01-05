@@ -1,4 +1,4 @@
-%[kind : controllers]
+%[kind : json]
 %[file : list%%(self.obName.lower())%%s.php] 
 %[path : controllers/json]
 <?php
@@ -50,11 +50,12 @@ for field in self.fields:
 	if field.referencedObject:
 		attributeCode += """
 	public function for%(referencedObject)s($%(fieldDbName)s){
-		$data['teas'] = Tea_model::getAllTeasFor%(referencedObject)sBy_%(fieldDbName)s($this->db, $%(fieldDbName)s);
+		$data['%(objectNameLower)ss'] = %(obName)s_model::getAll%(obName)ssFor%(referencedObject)sBy_%(fieldDbName)s($this->db, $%(fieldDbName)s);
 		$this->load->view('json/list%(objectNameLower)ss_view', $data);
 	}""" % { 'referencedObject' : field.referencedObject.obName,
 			'fieldDbName' : field.dbName.lower(),
-			'objectNameLower' : self.obName.lower()
+			'objectNameLower' : self.obName.lower(),
+			'obName' : self.obName
 		}
 	
 	if attributeCode != "":

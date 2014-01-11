@@ -201,11 +201,13 @@ RETURN = allAttributesCode%%);
 else:
 	RETURN = ""%%
 
-%%getterAllFK = ""
+%%getterAll = ""
 for field in self.fields:
-	getterFK = ""
-	if field.referencedObject:
-		getterFK = """
+	getter = ""
+	if field.autoincrement:
+		continue
+	elif field.referencedObject:
+		getter = """
 	/**
 	 * Recupere la liste des enregistrements depuis la cle etrangere %(obName)s->%(fieldName)s ==> %(referencedObjectName)s->%(foreignKey)s
 	 * @param object $db database object
@@ -225,11 +227,30 @@ for field in self.fields:
 		'foreignKey' : field.referencedObject.keyFields[0].dbName,
 		'fieldName' : field.dbName
 	}
-	getterAllFK += getterFK
-RETURN = getterAllFK
+	else:
+		if field.sqlType.upper()[0:4] == "FILE":
+			continue
+		getter = """
+	/**
+	 * Recupere la liste des enregistrements depuis le champ %(fieldName)s
+	 * @param object $db database object
+	 * @return array of data
+	 */
+	static function getAll%(obName)ssBy_%(fieldName)s($db, $%(fieldName)s, $limit = null, $offset = null){
+		$rows = getAll%(obName)ssFromDBBy_%(fieldName)s($db, $%(fieldName)s, $limit, $offset);
+		$records = array();
+		foreach ($rows as $row) {
+			$records[$row['%(keyField)s']] = %(obName)s_model::%(obName)s_modelFromRow($row);
+		}
+		return $records;
+	}
+""" % { 'keyField' : self.keyFields[0].dbName,
+		'obName' : self.obName,
+		'fieldName' : field.dbName
+	}
+	getterAll += getter
+RETURN = getterAll
 %%
-	
-	
 	
 	/***************************************************************************
 	 * DO NOT MODIFY THIS FILE, IT IS GENERATED

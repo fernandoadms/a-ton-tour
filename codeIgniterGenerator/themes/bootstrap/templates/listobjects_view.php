@@ -1,6 +1,6 @@
 %[kind : views]
 %[file : list%%(self.obName.lower())%%s_view.php] 
-%[path : views]
+%[path : views/%%(self.obName.lower())%%]
 <?php
 /*
  * Created by generator
@@ -19,7 +19,7 @@ if($this->session->userdata('user_name') == "") {
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head><!-- Liste des %%(self.displayName)%%s -->
-<? echo htmlHeader($this->lang->line('%%(self.obName.lower())%%.form.list.title')); ?>
+<?php echo htmlHeader($this->lang->line('%%(self.obName.lower())%%.form.list.title')); ?>
 
 </head>
 <body>
@@ -42,7 +42,7 @@ if($this->session->userdata('user_name') == "") {
 		<!-- table header auto-generated : -->
 			%%
 RETURN = self.dbAndObVariablesList("""<th class=\"sortable\">
-						<a href="<?=base_url()?>index.php/list%(obName)ss/index/(dbVar)s/<?= ($orderBy == '(dbVar)s'&& $asc == 'asc')?('desc'):('asc') ?>"
+						<a href="<?=base_url()?>index.php/%(obName)s/list%(obName)ss/index/(dbVar)s/<?= ($orderBy == '(dbVar)s'&& $asc == 'asc')?('desc'):('asc') ?>"
 						<?php if($orderBy == '(dbVar)s'&& $asc == 'asc') {?>
 							class=" sortAsc"
 						<?php }else if($orderBy == '(dbVar)s'&& $asc == 'desc') {?>
@@ -118,8 +118,8 @@ for field in self.fields:
 	
 RETURN = allAttributesCode
 			%%
-					<td><a href="<?=base_url()?>index.php/edit%%(self.obName.lower())%%/index/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>" title="<?= $this->lang->line('form.button.edit') ?>"><i class="icon-pencil"> </i></a>
-						<a href="<?=base_url()?>index.php/list%%(self.obName.lower())%%s/delete/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>" title="<?= $this->lang->line('form.button.delete') ?>"><i class="icon-trash"> </i></a></td>
+					<td><a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/edit%%(self.obName.lower())%%/index/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>" title="<?= $this->lang->line('form.button.edit') ?>"><i class="icon-pencil"> </i></a>
+						<a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/list%%(self.obName.lower())%%s/delete/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>" title="<?= $this->lang->line('form.button.delete') ?>"><i class="icon-trash"> </i></a></td>
 				</tr>
 <?php 
 $even = !$even; 
@@ -134,9 +134,9 @@ endforeach; ?>
 			</ul>
 		</div>
 		
-		<a href="<?=base_url()?>index.php/create%%(self.obName.lower())%%/index" class="btn btn-primary"><?= $this->lang->line('%%(self.obName.lower())%%.form.create.title') ?></a>
+		<a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/create%%(self.obName.lower())%%/index" class="btn btn-primary"><?= $this->lang->line('%%(self.obName.lower())%%.form.create.title') ?></a>
 		
-<? echo bodyFooter(); ?>
+<?php echo bodyFooter(); ?>
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 %[kind : controllers]
 %[file : import%%(self.obName.lower())%%s.php] 
-%[path : controllers]
+%[path : controllers/%%(self.obName.lower())%%]
 <?php
 /*
  * Created by generator
@@ -22,7 +22,7 @@ class Import%%(self.obName)%%s extends CI_Controller {
 	
 	public function index(){
 		$data = array();
-		$this->load->view('import%%(self.obName.lower())%%s_view', $data);
+		$this->load->view('%%(self.obName.lower())%%/import%%(self.obName.lower())%%s_view', $data);
 	}
 	
 	public function loadFile(){
@@ -61,7 +61,7 @@ class Import%%(self.obName)%%s extends CI_Controller {
 			unlink($filename);
 		}
 	
-		$this->load->view('import%%(self.obName.lower())%%s_view', $data);
+		$this->load->view('%%(self.obName.lower())%%/import%%(self.obName.lower())%%s_view', $data);
 	
 	}
 	/**

@@ -1,6 +1,6 @@
 %[kind : controllers]
 %[file : list%%(self.obName.lower())%%s.php] 
-%[path : controllers]
+%[path : controllers/%%(self.obName.lower())%%]
 <?php
 /*
  * Created by generator
@@ -98,7 +98,7 @@ for field in self.fields:
 RETURN = allAttributeCode
 %%
 		
-		$this->load->view('list%%(self.obName.lower())%%s_view', $data);
+		$this->load->view('%%(self.obName.lower())%%/list%%(self.obName.lower())%%s_view', $data);
 	}
 
 	
@@ -111,7 +111,7 @@ RETURN = allAttributeCode
 
 		$this->session->set_flashdata('msg_confirm', '%%(self.obName)%% supprime');
 
-		redirect('list%%(self.obName.lower())%%s/index'); 
+		redirect('%%(self.obName.lower())%%/list%%(self.obName.lower())%%s/index'); 
 	}
 
 }

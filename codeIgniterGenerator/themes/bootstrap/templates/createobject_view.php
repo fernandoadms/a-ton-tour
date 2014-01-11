@@ -1,6 +1,6 @@
 %[kind : views]
 %[file : create%%(self.obName.lower())%%_view.php]
-%[path : views]
+%[path : views/%%(self.obName.lower())%%]
 <?php
 /*
  * Created by generator
@@ -18,7 +18,7 @@ if($this->session->userdata('user_name') == "") {
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<? echo htmlHeader($this->lang->line('%%(self.obName.lower())%%.form.create.title') ); ?>
+<?php echo htmlHeader($this->lang->line('%%(self.obName.lower())%%.form.create.title') ); ?>
 
 </head>
 <body>
@@ -30,10 +30,10 @@ if($this->session->userdata('user_name') == "") {
 		<h2><?= $this->lang->line('%%(self.obName.lower())%%.form.create.title') ?></h2>
 			
 		<div class="row-fluid">
-<?
+<?php
 $attributes_info = array('name' => 'AddForm', 'class' => 'form-horizontal');
 $fields_info = array();
-echo form_open_multipart('create%%(self.obName.lower())%%/add', $attributes_info, $fields_info );
+echo form_open_multipart('%%(self.obName.lower())%%/create%%(self.obName.lower())%%/add', $attributes_info, $fields_info );
 ?>
 
 			<fieldset>
@@ -53,7 +53,7 @@ for field in self.fields:
 	if not field.nullable:
 		attributeCode += "* "
 
-	attributeCode += """<?= $this->lang->line('%(objectObName)s.form.%(dbName)s.description') ?> :</label>
+	attributeCode += """<?= $this->lang->line('%(objectObName)s.form.%(dbName)s.label') ?> :</label>
 	<div class="controls">""" % { 'dbName' : field.dbName, 'objectObName' : self.obName.lower() }
 
 	cssClass = "inp-form"
@@ -125,7 +125,7 @@ for field in self.fields:
 			
 	attributeCode += """
 		<p class="help-block valtype"><?= $this->lang->line('%(objectObName)s.form.%(dbName)s.description')?></p>
-	</div>""" % {'dbName' : field.dbName, 'objectObName' : self.obName.lower() }
+	</div></div>""" % {'dbName' : field.dbName, 'objectObName' : self.obName.lower() }
 
 
 	# ajouter le nouvel attribut, avec indentation si ce n'est pas le premier
@@ -138,19 +138,19 @@ RETURN =  allAttributesCode
 
 		    <div class="form-actions">
 			    <button type="submit" class="btn btn-primary"><?= $this->lang->line('form.button.save') ?></button>
-			    <a href="<?=base_url()?>index.php/list%%(self.obName.lower())%%s/index" type="button" class="btn"><?= $this->lang->line('form.button.cancel') ?></a>
+			    <a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/list%%(self.obName.lower())%%s/index" type="button" class="btn"><?= $this->lang->line('form.button.cancel') ?></a>
 		    </div>
 			
 			</fieldset>
 
-<?
+<?php
 echo form_close('');
 ?>
 
 		</div> <!-- .row-fluid -->
 	</div> <!-- .container -->
 
-<? echo bodyFooter(); ?>
+<?php echo bodyFooter(); ?>
 
 %%
 jsCode = ""

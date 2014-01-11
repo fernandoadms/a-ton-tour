@@ -76,6 +76,7 @@ else:
 	phpCode = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, not includesAutoIncrement)
 RETURN = phpCode
 %%);
+		log_message('debug','[%%(self.obName.lower())%%_helper.php] : insertNew%%(self.obName)%% with data'. print_r($data, true) );
 		$db->insert('%%(self.dbTableName)%%',$data);
 		return $db->insert_id();
 	}
@@ -100,6 +101,7 @@ if self.isCrossTable:
 RETURN = self.dbVariablesList("'(var)s'=>$(var)s", 'var',  '', '', 0, includesKey)
 %%);
 		$db->where('%%(self.keyFields[0].dbName)%%', %%(self.listOfKeys(fieldPrefix="$", fieldSuffix = ", "))%%);
+		log_message('debug','[%%(self.obName.lower())%%_helper.php] : update%%(self.obName)%% with data'. print_r($data, true) );
 		$db->update('%%(self.dbTableName)%%', $data);
 	}
 }
@@ -139,17 +141,19 @@ if (!function_exists('get%%(self.obName)%%Row')) {
 }
 
 
-%%getterAllFK = ""
+%%getterAll = ""
 for field in self.fields:
-	getterFK = ""
-	if field.referencedObject:
-		getterFK = """
+	getter = ""
+	if field.autoincrement:
+		continue
+	elif field.referencedObject:
+		getter = """
 /**
  * Recupere la liste des enregistrements depuis la cle etrangere %(obName)s->%(fieldName)s ==> %(referencedObjectName)s->%(foreignKey)s
  * @param object $db database object
  * @return array of data
  */
-if (!function_exists('getAll%(obName)ssFor%(referencedObjectName)sFromDB')) {
+if (!function_exists('getAll%(obName)ssFor%(referencedObjectName)sFromDBBy_%(fieldName)s')) {
 	function getAll%(obName)ssFor%(referencedObjectName)sFromDBBy_%(fieldName)s($db, $%(foreignKey)s, $orderBy = null, $asc = null, $limit = null, $offset = null) {
 		if( $orderBy != null ){
 			if($asc != null) {
@@ -177,9 +181,34 @@ if (!function_exists('getAll%(obName)ssFor%(referencedObjectName)sFromDB')) {
 		'foreignKey' : field.referencedObject.keyFields[0].dbName,
 		'fieldName' : field.dbName
 	}
-	getterAllFK += getterFK
-RETURN = getterAllFK
+	else:
+		if field.sqlType.upper()[0:4] == "FILE":
+			continue
+		getter = """
+/**
+ * Recupere la liste des enregistrements depuis une valeur du champ %(fieldName)s
+ * @param object $db database object
+ * @return array of data
+ */
+if (!function_exists('getAll%(obName)ssFromDBBy_%(fieldName)s')) {
+	function getAll%(obName)ssFromDBBy_%(fieldName)s($db, $%(fieldName)s, $limit = null, $offset = null) {
+		$query = $db->from("%(tableName)s")->limit($limit, $offset)->like('%(fieldName)s', $%(fieldName)s)->get();
+		// recuperer les enregistrements
+		$records = array();
+		foreach ($query->result_array() as $row) {
+			$records[] = $row;
+		}
+		return $records;
+	}
+}
+""" % { 'tableName' : self.dbTableName,
+		'obName' : self.obName,
+		'fieldName' : field.dbName
+	}
+	getterAll += getter
+RETURN = getterAll
 %%
+
 
 	/***************************************************************************
 	 * USER DEFINED FUNCTIONS

@@ -1,6 +1,6 @@
 %[kind : controllers]
 %[file : edit%%(self.obName.lower())%%.php] 
-%[path : controllers]
+%[path : controllers/%%(self.obName.lower())%%]
 <?php
 /*
  * Created by generator
@@ -54,7 +54,7 @@ for field in self.fields:
 RETURN = allAttributeCode
 %%
 
-		$this->load->view('edit%%(self.obName.lower())%%_view',$data);
+		$this->load->view('%%(self.obName.lower())%%/edit%%(self.obName.lower())%%_view',$data);
 	}
 
 	/**
@@ -81,6 +81,8 @@ for field in self.fields:
 	if field.sqlType.upper() == "FILE":
 		useUpload = True
 		attributeCode += """
+		
+		$this->upload->initialize($config); // RAZ des erreurs
 		// Suppression de l'ancien fichier %(dbName)s : %(desc)s
 		if( $oldModel->%(dbName)s != "" && $model->%(dbName)s == ""){
 			unlink($path . $oldModel->%(dbName)s);
@@ -90,15 +92,16 @@ for field in self.fields:
 		if ( ! $this->upload->do_upload('%(dbName)s_file')) {
 			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
 			$codeErrors = $this->upload->display_errors() . "ext: [" . $uploadDataFile_%(dbName)s['file_ext'] ."] type mime: [" . $uploadDataFile_%(dbName)s['file_type'] . "]";
-			if($this->upload->display_errors() == $this->lang->line('upload_no_file_selected')){
-    	        $codeErrors = "NO_FILE";
-        	}
-	    }else{
+			if($this->upload->display_errors() == $this->lang->line('upload_no_file_selected')
+				|| $this->upload->display_errors() == '<p>upload_no_file_selected</p>'){ // if not translated
+				$codeErrors = "NO_FILE";
+			}
+		}else{
 			$uploadDataFile_%(dbName)s = $this->upload->data('%(dbName)s_file');
-	    }
-	    
+		}
+	
 		if($codeErrors != null && $codeErrors != "NO_FILE") {
-	    	$this->session->set_flashdata('msg_error', $codeErrors);
+			$this->session->set_flashdata('msg_error', $codeErrors);
 		} else
 		{
 			$model->%(dbName)s = "";
@@ -136,7 +139,7 @@ RETURN = codeForUploadFile
 %%
 		$this->session->set_flashdata('msg_confirm', '%%(self.obName)%% mis a jour');
 
-		redirect('list%%(self.obName.lower())%%s/index');
+		redirect('%%(self.obName.lower())%%/list%%(self.obName.lower())%%s/index');
 	}
 
 }

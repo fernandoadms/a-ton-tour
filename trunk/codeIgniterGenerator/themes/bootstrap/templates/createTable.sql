@@ -1,6 +1,20 @@
 %[kind : sql]
 %[file : cretab_%%(self.obName.lower())%%.sql]
 %[path : ../sources/sql]
+/**
+ * Script MySQL pour %%(self.obName)%%
+ * %%foreignKeys = ""
+for field in self.fields:
+	foreignKey = ""
+	if field.referencedObject:
+		foreignKey = "\n\t- cretab_%s.sql" % field.referencedObject.obName.lower()
+	foreignKeys += foreignKey
+if foreignKeys != "":
+	foreignKeys = "Depend de :" + foreignKeys
+RETURN = foreignKeys
+%%
+**/
+
 CREATE TABLE `%%(self.dbTableName)%%` (
 %%content = ""
 allAttributesCode = ""
@@ -61,10 +75,10 @@ for field in self.fields:
 	if field.referencedObject:
 		foreignKey = """ALTER TABLE %(tableName)s ADD CONSTRAINT FK_%(tableColumn)s_%(foreignTable)s_%(foreignColumn)s FOREIGN KEY (%(tableColumn)s) REFERENCES %(foreignTable)s (%(foreignColumn)s);
 """ % {	'tableName': self.dbTableName,
-			'foreignTable': field.referencedObject.dbTableName,
-			'foreignColumn': field.referencedObject.keyFields[0].dbName,
-			'tableColumn': field.dbName
-		}
+	'foreignTable': field.referencedObject.dbTableName,
+	'foreignColumn': field.referencedObject.keyFields[0].dbName,
+	'tableColumn': field.dbName 
+	}
 	foreignKeys += foreignKey
 RETURN = foreignKeys
 %%

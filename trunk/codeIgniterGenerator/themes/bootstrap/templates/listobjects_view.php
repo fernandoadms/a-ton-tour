@@ -74,6 +74,20 @@ allEnums = "$enum_%(dbName)s = array(%(allAttributes)s);" % {'dbName' : field.db
 RETURN = allEnums
 %%
 foreach($%%(self.obName.lower())%%s as $%%(self.obName.lower())%%):
+%%allAttributesCode = ""
+
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject:
+		attributeCode = """	$%(dbName)s_text = %(referencedObject)s_model::get%(referencedObject)s($this->db, $%(structureObName)s->%(dbName)s);
+""" % {
+		'structureObName' : self.obName.lower(),
+		'referencedObject': field.referencedObject.obName,
+		'dbName' : field.dbName
+		}
+	allAttributesCode += attributeCode
+RETURN = allAttributesCode
+%%
 ?>
 	<tr>
 %%allAttributesCode = ""
@@ -84,7 +98,7 @@ for field in self.fields:
 				<td valign="top">"""
 		if field.referencedObject:
 			# si pas de lien, le champ vaut 0 (et la sequence commence à 1)
-			attributeCode += """<?=($%(structureObName)s->%(dbName)s == 0)?(""):($%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s)?>
+			attributeCode += """<?=($%(structureObName)s->%(dbName)s == 0)?(""):($%(dbName)s_text->%(display)s)?>
 			""" % { 'display' : field.display, 
 					'referencedObject' : field.referencedObject.obName.lower(),
 					'structureObName' : self.obName.lower(),
@@ -117,7 +131,7 @@ for field in self.fields:
 		allAttributesCode += attributeCode + "</td>"
 	
 RETURN = allAttributesCode
-			%%
+%%
 					<td><a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/edit%%(self.obName.lower())%%/index/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>" title="<?= $this->lang->line('form.button.edit') ?>"><i class="icon-pencil"> </i></a>
 						<a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/list%%(self.obName.lower())%%s/delete/<?=$%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%?>" title="<?= $this->lang->line('form.button.delete') ?>"><i class="icon-trash"> </i></a></td>
 				</tr>
@@ -132,11 +146,15 @@ endforeach; ?>
 			<ul>
 			<?php if(isset($pagination)){ echo $pagination->create_links(); } ?>
 			</ul>
-		</div>
+		</div><!-- .pagination -->
 		
 		<a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/create%%(self.obName.lower())%%/index" class="btn btn-primary"><?= $this->lang->line('%%(self.obName.lower())%%.form.create.title') ?></a>
-		
+	</div><!-- .container -->
+	
 <?php echo bodyFooter(); ?>
+
+<script src="<?= base_url() ?>www/js/views/%%(self.obName.lower())%%/list%%(self.obName.lower())%%s.js"></script>
+
 
 </body>
 </html>

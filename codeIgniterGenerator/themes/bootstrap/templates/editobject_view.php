@@ -152,10 +152,10 @@ for field in self.fields:
 RETURN =  allAttributesCode
 %%
 			
-			    <div class="form-actions">
-				    <button type="submit" class="btn btn-primary"><?= $this->lang->line('form.button.save') ?></button>
-				    <a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/list%%(self.obName.lower())%%s/index" type="button" class="btn"><?= $this->lang->line('form.button.cancel') ?></a>
-			    </div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary"><?= $this->lang->line('form.button.save') ?></button>
+				<a href="<?=base_url()?>index.php/%%(self.obName.lower())%%/list%%(self.obName.lower())%%s/index" type="button" class="btn"><?= $this->lang->line('form.button.cancel') ?></a>
+			</div>
 			
 			
 			</fieldset>
@@ -185,6 +185,8 @@ if hasDate:
 	jsCode += """</script>"""
 RETURN = jsCode
 %%
+
+<script src="<?= base_url() ?>www/js/views/%%(self.obName.lower())%%/edit%%(self.obName.lower())%%.js"></script>
 
 
 </body>

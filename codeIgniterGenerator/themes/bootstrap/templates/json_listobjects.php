@@ -64,7 +64,7 @@ for field in self.fields:
 			continue
 		attributeCode += """
 	public function findBy_%(fieldDbName)s($%(fieldDbName)s, $limit = 50, $offset = 0){
-		$data['%(objectNameLower)ss'] = %(obName)s_model::getAll%(obName)ssBy_%(fieldDbName)s($this->db, $%(fieldDbName)s, $limit, $offset);
+		$data['%(objectNameLower)ss'] = %(obName)s_model::getAll%(obName)ssBy_%(fieldDbName)s($this->db, urldecode($%(fieldDbName)s), $limit, $offset);
 		$this->load->view('json/list%(objectNameLower)ss_view', $data);
 	}""" % { 'fieldDbName' : field.dbName.lower(),
 			'objectNameLower' : self.obName.lower(),

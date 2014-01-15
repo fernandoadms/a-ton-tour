@@ -36,6 +36,7 @@ class Field:
 		self.autoincrement = False
 		self.referencedObject = None
 		self.display = None
+		self.access = None
 		self.node = None
 	
 	def sysout(self):
@@ -94,6 +95,8 @@ class CIObject:
 					allSubStructure[attributeTag.getAttribute("referencedObject")] = subStructure
 				aField.referencedObject = allSubStructure[attributeTag.getAttribute("referencedObject")]
 				#print("...... key: %s" % aField.referencedObject.keyFields[0].dbName)
+			if attributeTag.getAttribute("access") != "":
+				aField.access = attributeTag.getAttribute("access")
 
 			if attributeTag.getAttribute("display") != "":
 				aField.display = attributeTag.getAttribute("display")

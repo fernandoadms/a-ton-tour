@@ -59,7 +59,7 @@ for field in self.fields:
 	cssClass = "inp-form"
 
 			
-	if field.referencedObject:
+	if field.referencedObject and field.access is None:
 		attributeCode += """<select name="%(dbName)s" id="%(dbName)s"> """ % { 'dbName' : field.dbName }
 		if field.nullable:
 			attributeCode += """<option value=""></option>"""
@@ -74,6 +74,10 @@ for field in self.fields:
 				'structureObName' : self.obName.lower(),
 				'dbName' : field.dbName }
 				
+	elif field.referencedObject and field.access == "ajax" :
+		attributeCode += """<input type="text" name="%(dbName)s_text" id="%(dbName)s_text" />
+		<input type="hidden" name="%(dbName)s" id="%(dbName)s">
+		""" % { 'dbName' : field.dbName }
 	elif field.sqlType.upper()[0:4] == "DATE":
 		attributeCode += """<div data-date-format="dd/mm/yyyy" id="datepicker_%(dbName)s"
 			class="input-append date"><input type="text" name="%(dbName)s" id="%(dbName)s" size="8" maxlength="10"> 

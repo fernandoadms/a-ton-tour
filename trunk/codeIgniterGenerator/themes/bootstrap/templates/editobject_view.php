@@ -40,6 +40,21 @@ if($this->session->userdata('user_name') == "") {
 $attributes_info = array('name' => 'EditForm', 'class' => 'form-horizontal');
 $fields_info = array('%%(self.keyFields[0].dbName)%%' => $%%(self.obName.lower())%%->%%(self.keyFields[0].dbName)%%);
 echo form_open_multipart('%%(self.obName.lower())%%/edit%%(self.obName.lower())%%/save', $attributes_info, $fields_info );
+%%allAttributesCode = ""
+
+for field in self.fields:
+	attributeCode = ""
+	if field.referencedObject and field.access == "ajax" :
+		attributeCode += """
+$%(dbName)s_%(referencedObject)s = %(referencedObject)s_model::get%(referencedObject)s($this->db, $%(structureObName)s->%(dbName)s );""" % { 
+			'structureObName': self.obName.lower(), 
+			'dbName' : field.dbName, 
+			'referencedObject' : field.referencedObject.obName
+		}
+	allAttributesCode += attributeCode
+			
+RETURN =  allAttributesCode
+%%
 ?>
 
 			<fieldset>
@@ -67,7 +82,7 @@ for field in self.fields:
 	cssClass = "inp-form"
 
 			
-	if field.referencedObject:
+	if field.referencedObject and field.access is None :
 		attributeCode += """<select name="%(dbName)s" id="%(dbName)s"> """ % { 'dbName' : field.dbName }
 		if field.nullable:
 			attributeCode += """<option value=""></option>"""
@@ -82,6 +97,14 @@ for field in self.fields:
 				'structureObName' : self.obName.lower(),
 				'dbName' : field.dbName}
 				
+	elif field.referencedObject and field.access == "ajax" :
+		attributeCode += """<input type="text" name="%(dbName)s_text" id="%(dbName)s_text" value="<?= $%(dbName)s_%(referencedObject)s->%(display)s ?>"/>
+		<input type="hidden" name="%(dbName)s" id="%(dbName)s" value="<?= $%(structureObName)s->%(dbName)s ?>">
+		""" % { 'dbName' : field.dbName,
+				'referencedObject' : field.referencedObject.obName, 
+				'structureObName' : self.obName.lower(),
+				'display' : field.display
+		 }
 	elif field.sqlType.upper()[0:4] == "DATE":
 		dateFormat = field.sqlType[5:-1]
 		attributeCode += """<div data-date-format="%(dateFormat)s" id="datepicker_%(dbName)s"

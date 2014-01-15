@@ -78,8 +78,9 @@ foreach($%%(self.obName.lower())%%s as $%%(self.obName.lower())%%):
 
 for field in self.fields:
 	attributeCode = ""
-	if field.referencedObject:
-		attributeCode = """	$%(dbName)s_text = %(referencedObject)s_model::get%(referencedObject)s($this->db, $%(structureObName)s->%(dbName)s);
+	if field.referencedObject and field.access == "ajax" :
+		attributeCode = """
+	$%(dbName)s_text = %(referencedObject)s_model::get%(referencedObject)s($this->db, $%(structureObName)s->%(dbName)s);
 """ % {
 		'structureObName' : self.obName.lower(),
 		'referencedObject': field.referencedObject.obName,
@@ -96,13 +97,17 @@ for field in self.fields:
 	if field.dbName != self.keyFields[0].dbName:
 		attributeCode = """
 				<td valign="top">"""
-		if field.referencedObject:
+		if field.referencedObject and field.access is None:
 			# si pas de lien, le champ vaut 0 (et la sequence commence à 1)
-			attributeCode += """<?=($%(structureObName)s->%(dbName)s == 0)?(""):($%(dbName)s_text->%(display)s)?>
-			""" % { 'display' : field.display, 
+			attributeCode += """<?=($%(structureObName)s->%(dbName)s == 0)?(""):($%(dbName)s_text->%(display)s)?>""" % { 
+					'display' : field.display, 
 					'referencedObject' : field.referencedObject.obName.lower(),
 					'structureObName' : self.obName.lower(),
 					'dbName' : field.dbName}
+		elif field.referencedObject and field.access == 'ajax':
+			attributeCode += """<?=$%(dbName)s_text->%(display)s?> """ % {
+					'display' : field.display, 
+					'dbName' : field.dbName }
 		elif field.sqlType.upper()[0:4] == "FLAG":
 			label = field.sqlType[5:-1].replace('"','').replace("'","")
 			attributeCode += """<?= ($%(structureObName)s->%(dbName)s == "O")?("%(label)s"):("")?>""" % {'label' : label,

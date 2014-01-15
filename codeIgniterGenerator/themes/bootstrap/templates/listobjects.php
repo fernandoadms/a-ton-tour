@@ -78,7 +78,13 @@ RETURN = allAttributeCode
 
 for field in self.fields:
 	attributeCode = ""
-	if field.sqlType.upper()[0:4] == "ENUM":
+	if field.referencedObject and field.access is None :
+		attributeCode += """
+		$data['%(referencedObjectLower)sCollection'] = %(referencedObject)s_model::getAll%(referencedObject)ss($this->db);""" % {
+			'referencedObjectLower' : field.referencedObject.obName.lower(),
+			'referencedObject' : field.referencedObject.obName
+		}
+	elif field.sqlType.upper()[0:4] == "ENUM":
 		enumTypes = field.sqlType[5:-1]
 		attributeCode = """
 		$data["enum_%(dbName)s"] = array( """ % {'dbName' : field.dbName}

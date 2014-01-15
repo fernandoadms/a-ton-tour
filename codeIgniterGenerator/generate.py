@@ -90,10 +90,10 @@ class TemplateFileReader:
 		for item in rawContent.split("%%"):
 			if wasCode:
 				if re.match("\(.*\)", item):
-					segments.append( PythonLine(item) )
+					segments.append( PythonLine(item, self) )
 					#DEBUG print ("PythonLine : %s" % item)
 				else:
-					segments.append( PythonSegment(item) )
+					segments.append( PythonSegment(item, self) )
 					#DEBUG print ("PythonSegment : %s" % item)
 			else:
 				segments.append( StringSegment(item) )
@@ -121,8 +121,9 @@ class StringSegment:
 		return self.data
 
 class PythonSegment:
-	def __init__(self, data):
+	def __init__(self, data, aTemplateFileReader):
 		self.data = data.strip()
+		self.template = aTemplateFileReader
 	
 	def toString(self, structure):
 		filename='<input>'
@@ -141,7 +142,7 @@ class PythonSegment:
 			code_object = compile(self.data, '<string>', 'exec')
 			exec code_object in localVars
 		except Exception as e :
-			print ("-  ERR -----------------------------------------")
+			print ("-  ERR --Kind:%s---------------------------------------" % (self.template.kind) )
 			InteractiveInterpreter.showsyntaxerror(console, filename)
 			frames = inspect.trace()
 			lineNumber = frames[1][2]
@@ -160,8 +161,9 @@ class PythonSegment:
 		return localVars["RETURN"]
 
 class PythonLine:
-	def __init__(self, data):
+	def __init__(self, data, aTemplateFileReader):
 		self.data = data.strip()
+		self.template = aTemplateFileReader
 	
 	def toString(self, structure):
 		result = ""
@@ -169,9 +171,10 @@ class PythonLine:
 			result = eval(self.data, {"self" : structure} )
 		except Exception as e:
 			print ("ERROR while executing this code:")
+			print ("-  ERR --Kind:%s---------------------------------------" % (self.template.kind) )
 			print ("------------------------------------------------")
 			print (self.data)
-			print ("------------------------------------------------")
+			print ("- /ERR -----------------------------------------")
 		
 		return result
 
@@ -212,7 +215,7 @@ if __name__ == '__main__':
 	# découpage de generateObjects en liste d'items à générer
 	kindsToGenerate = []
 	if generateObjects.find("all") > -1:
-		kindsToGenerate = "helpers,controllers,views,subViews,baseModels,models,sql,lang,unitTest".split(",")
+		kindsToGenerate = "helpers,controllers,views,subViews,baseModels,models,sql,lang,unitTest,json,js".split(",")
 	else:
 		for item in generateObjects.split(","):
 			kindsToGenerate.append(item.strip())

@@ -59,7 +59,7 @@ for field in self.fields:
 	cssClass = "inp-form"
 
 			
-	if field.referencedObject and field.access is None:
+	if field.referencedObject and field.access == "default":
 		attributeCode += """<select name="%(dbName)s" id="%(dbName)s"> """ % { 'dbName' : field.dbName }
 		if field.nullable:
 			attributeCode += """<option value=""></option>"""

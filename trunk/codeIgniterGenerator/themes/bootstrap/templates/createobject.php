@@ -43,7 +43,7 @@ RETURN = allAttributeCode
 
 for field in self.fields:
 	attributeCode = ""
-	if field.referencedObject and field.access is None :
+	if field.referencedObject and field.access == "default":
 		attributeCode += """
 		$data['%(referencedObjectLower)sCollection'] = %(referencedObject)s_model::getAll%(referencedObject)ss($this->db);""" % {
 			'referencedObjectLower' : field.referencedObject.obName.lower(),

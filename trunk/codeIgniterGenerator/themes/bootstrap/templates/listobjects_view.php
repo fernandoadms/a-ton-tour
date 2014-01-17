@@ -97,15 +97,15 @@ for field in self.fields:
 	if field.dbName != self.keyFields[0].dbName:
 		attributeCode = """
 				<td valign="top">"""
-		if field.referencedObject and field.access is None:
+		if field.referencedObject and field.access == "default":
 			# si pas de lien, le champ vaut 0 (et la sequence commence à 1)
-			attributeCode += """<?=($%(structureObName)s->%(dbName)s == 0)?(""):($%(dbName)s_text->%(display)s)?>""" % { 
-					'display' : field.display, 
+			attributeCode += """<?=($%(structureObName)s->%(dbName)s == 0)?(""):($%(referencedObject)sCollection[$%(structureObName)s->%(dbName)s]->%(display)s)?>
+			""" % { 'display' : field.display, 
 					'referencedObject' : field.referencedObject.obName.lower(),
 					'structureObName' : self.obName.lower(),
 					'dbName' : field.dbName}
 		elif field.referencedObject and field.access == 'ajax':
-			attributeCode += """<?=$%(dbName)s_text->%(display)s?> """ % {
+			attributeCode += """<?=$%(dbName)s_text->%(display)s?>""" % {
 					'display' : field.display, 
 					'dbName' : field.dbName }
 		elif field.sqlType.upper()[0:4] == "FLAG":

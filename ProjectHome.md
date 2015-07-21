@@ -1,0 +1,1 @@
+Gestion d'un projet par des spécifications et génération de code pour manipuler les objets (liste, création, édition, suppression)
